@@ -1,0 +1,10 @@
+Requerimientos:
+- R (3.0.1 o superior)
+que todas las instalaciones hechas desde la consola de R se guarden en directorio local
+- RCPP(se puede instalar con una consola de R "install.packages("Rcpp")" si se tienen los mirrors de CRAN
+- RInside(se puede instalar ejecutando en consola de R "install.packages("RInside")")
+- Rserve ("install.packages("Rserve"))) - Para poder tener multiples instancias e hilos, requiere configuración de la variable de entorno R_HOME
+- Paquete de R Clara instalado, (install.packages("cluster"))
+- Paquete de R inline instalado, (install.packages("inline"))
+- R(gplot)
+- qt-5.0.1

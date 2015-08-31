@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FormDataset</class>
+ <widget class="QWidget" name="FormDataset">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>460</width>
+    <height>267</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="qvbl_dataset">
+     <item>
+      <widget class="QGroupBox" name="qgb_tipoImport">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Añadir desde:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+        <property name="leftMargin">
+         <number>1</number>
+        </property>
+        <property name="topMargin">
+         <number>1</number>
+        </property>
+        <property name="rightMargin">
+         <number>1</number>
+        </property>
+        <property name="bottomMargin">
+         <number>1</number>
+        </property>
+        <item>
+         <widget class="QRadioButton" name="qrb_idsEntrada">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Archivo IDS</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="qrb_dirEntrada">
+          <property name="text">
+           <string>Directorio</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="qgb_configDset">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>70</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Configuración Dataset</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+        <property name="leftMargin">
+         <number>1</number>
+        </property>
+        <property name="topMargin">
+         <number>1</number>
+        </property>
+        <property name="rightMargin">
+         <number>1</number>
+        </property>
+        <property name="bottomMargin">
+         <number>1</number>
+        </property>
+        <item>
+         <widget class="QGroupBox" name="qgb_muestDset">
+          <property name="title">
+           <string>Muestrear Dataset</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="spacing">
+            <number>1</number>
+           </property>
+           <property name="leftMargin">
+            <number>1</number>
+           </property>
+           <property name="topMargin">
+            <number>1</number>
+           </property>
+           <property name="rightMargin">
+            <number>1</number>
+           </property>
+           <property name="bottomMargin">
+            <number>1</number>
+           </property>
+           <item>
+            <layout class="QFormLayout" name="qflt_muestra">
+             <property name="fieldGrowthPolicy">
+              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+             </property>
+             <property name="horizontalSpacing">
+              <number>6</number>
+             </property>
+             <property name="verticalSpacing">
+              <number>6</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="qlbl_tamMuestra">
+               <property name="text">
+                <string>Tamaño muestra</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="qsbx_tamMuestra">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>16777215</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="qgb_dataset">
+       <property name="title">
+        <string>Dataset</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>1</number>
+        </property>
+        <property name="leftMargin">
+         <number>1</number>
+        </property>
+        <property name="topMargin">
+         <number>1</number>
+        </property>
+        <property name="rightMargin">
+         <number>1</number>
+        </property>
+        <property name="bottomMargin">
+         <number>1</number>
+        </property>
+        <item>
+         <widget class="QTreeWidget" name="qtwg_dataset">
+          <property name="minimumSize">
+           <size>
+            <width>325</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::MultiSelection</enum>
+          </property>
+          <attribute name="headerDefaultSectionSize">
+           <number>110</number>
+          </attribute>
+          <attribute name="headerMinimumSectionSize">
+           <number>90</number>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>Nombre</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string># Residuos</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Tamaño</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="qvbl_info">
+     <item>
+      <widget class="QFrame" name="qfra_botones">
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <layout class="QVBoxLayout" name="qvbl_acciones">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="qpbt_anadir">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="toolTip">
+           <string comment="Añade proteína al conjunto de datos" extracomment="Genera dialogo para añadir proteína al conjunto de datos"/>
+          </property>
+          <property name="whatsThis">
+           <string comment="Botón para añadir proteínas al dataset" extracomment="Botón que desencadena acción para añadir proteínas al dataset"/>
+          </property>
+          <property name="text">
+           <string>Añadir</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>:/menu/cargarModelo.png</normalon>
+           </iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="qpbt_remover">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Remover</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/img/imagenes.qrc">
+            <normaloff>:/menu/quitarModelo64x64.png</normaloff>:/menu/quitarModelo64x64.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="qpbt_reset">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Resetear</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="qpbt_finalizar">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Finalizar</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPlainTextEdit" name="qpte_informe">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background:transparent;</string>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../resources/img/imagenes.qrc"/>
+ </resources>
+ <connections/>
+</ui>

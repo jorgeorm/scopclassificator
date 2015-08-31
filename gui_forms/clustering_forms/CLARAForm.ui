@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CLARAForm</class>
+ <widget class="QWidget" name="CLARAForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>303</width>
+    <height>91</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>303</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Clara</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetNoConstraint</enum>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="qhbl_config">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="qlbl_muestras">
+       <property name="minimumSize">
+        <size>
+         <width>75</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Num. muestras</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="qsbx_muestras">
+       <property name="maximumSize">
+        <size>
+         <width>70</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="whatsThis">
+        <string comment="Cantidad de muestras con las que se construiran los clusters." extracomment="Cantidad de muestras con las que se construiran los clusters."/>
+       </property>
+       <property name="specialValueText">
+        <string comment="Número de muestras que serán extraidas del dataset" extracomment="Número de muestras que serán extraidas del dataset"/>
+       </property>
+       <property name="accelerated">
+        <bool>true</bool>
+       </property>
+       <property name="minimum">
+        <number>5</number>
+       </property>
+       <property name="maximum">
+        <number>250</number>
+       </property>
+       <property name="value">
+        <number>35</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="qcbx_pam">
+       <property name="maximumSize">
+        <size>
+         <width>125</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Usar PAM</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="qhbl_flags">
+     <item>
+      <widget class="QLabel" name="qlbl_tamMuestra">
+       <property name="minimumSize">
+        <size>
+         <width>90</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Tam. muestra</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="qsbx_tamMuestra">
+       <property name="maximumSize">
+        <size>
+         <width>70</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="whatsThis">
+        <string comment="Cantidad de observaciones que compondrán cada muestra." extracomment="Cantidad de observaciones que compondrán cada muestra."/>
+       </property>
+       <property name="specialValueText">
+        <string comment="Número de observaciones en cada muestra, debe por lo menos estar entre el número cluster y la cantidad de observaciones en el dataset" extracomment="Número de observaciones en cada muestra, debe por lo menos estar entre el número cluster y la cantidad de observaciones en el dataset"/>
+       </property>
+       <property name="minimum">
+        <number>100</number>
+       </property>
+       <property name="maximum">
+        <number>99999</number>
+       </property>
+       <property name="value">
+        <number>240</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="qcbx_aleatorios">
+       <property name="maximumSize">
+        <size>
+         <width>125</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Aleatorios R?</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="qhbl_metricas">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="qlbl_metrica">
+       <property name="minimumSize">
+        <size>
+         <width>90</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Métrica:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="qcbx_metrica">
+       <property name="maximumSize">
+        <size>
+         <width>125</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="whatsThis">
+        <string comment="Especifica el tipo de métrica para calcular la disimulitud." extracomment="Especifica el tipo de métrica para calcular la disimulitud."/>
+       </property>
+       <property name="currentText">
+        <string>Euclidiana</string>
+       </property>
+       <item>
+        <property name="text">
+         <string comment="Distancia como la raíz de la suma de cuadrados de las diferencias." extracomment="Distancia como la raíz de la suma de cuadrados de las diferencias.">Euclidiana</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string comment="Distancia como la suma de las diferencias absolutas" extracomment="Distancia como la suma de las diferencias absolutas">Manhatan</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="qpbt_ejecutar">
+       <property name="minimumSize">
+        <size>
+         <width>90</width>
+         <height>25</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Ejecutar</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+  <zorder></zorder>
+  <zorder></zorder>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

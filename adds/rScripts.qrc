@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/rscripts">
+        <file alias="ffClara">ffClara.R</file>
+    </qresource>
+</RCC>

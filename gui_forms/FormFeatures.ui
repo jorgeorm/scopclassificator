@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FormFeatures</class>
+ <widget class="QWidget" name="FormFeatures">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>503</width>
+    <height>183</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>503</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="qhbl_clustering">
+     <item>
+      <widget class="QLabel" name="qlbl_clustering">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Método de Clustering:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="qcbx_clustering">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Clustering Large Applications&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <item>
+        <property name="text">
+         <string extracomment="Algoritmo K-medoides ">CLARA</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="qlbl_numHilos">
+       <property name="text">
+        <string>Num. Hilos</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="qsbx_numHilos">
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>50</number>
+       </property>
+       <property name="value">
+        <number>8</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="qhbl_matriz">
+     <item>
+      <widget class="QLabel" name="qlbl_tipoMatriz">
+       <property name="text">
+        <string>Tipo matriz:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="qcbx_tipoMatriz">
+       <item>
+        <property name="text">
+         <string comment="Construye matrices de distancia por cada proteína en el dataset" extracomment="Construye matrices de distancia por cada proteína en el dataset">Distancias</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string comment="Construye matrices de angulos por cada proteína en el dataset" extracomment="Construye matrices de angulos por cada proteína en el dataset">Angulos</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="qlbl_maxVal">
+       <property name="text">
+        <string>Máx distancia</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="qdsb_maxVal">
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string comment="whatsthis" extracomment="whatsthis"/>
+       </property>
+       <property name="whatsThis">
+        <string comment="Máxima distancia en Amstrongs a contemplarse en la matriz (default 20)" extracomment="Máxima distancia en amstrongs a contemplarse en la matriz a contemplarse (default 20 Amstrongs)"/>
+       </property>
+       <property name="value">
+        <double>20.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="qlbl_tamSubm">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tamaño de la submatriz que representará una característica&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Tam. Submatriz</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="qsbx_tamSubm">
+       <property name="maximumSize">
+        <size>
+         <width>60</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="maximum">
+        <number>9999</number>
+       </property>
+       <property name="value">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="qgrb_grupoCaract">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Características comunes:</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="qlbl_numFeatDomi">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Características comunes que se obtendrán por dominio proteico.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Dominio</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="qsbx_numFeatDomin">
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <number>999</number>
+        </property>
+        <property name="value">
+         <number>50</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="qlbl_numFeatClase">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Características comunes que se obtendran para todo el conjunto de datos, esté será el número de elementos que el footprint tenga.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Footprint</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="qsbx_numFeatClase">
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <number>999</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="qfra_formTecClust">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="qhbl_footprintCalc">
+     <item>
+      <widget class="QPushButton" name="qpb_calcularFootprint">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calcular las footprints para cada una de las proteínas en el dataset de proteínas.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Calcula el footprint de las proteínas en el dataset.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Calcular footprints</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

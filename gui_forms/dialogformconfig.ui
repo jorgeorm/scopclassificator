@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DialogFormConfig</class>
+ <widget class="QDialog" name="DialogFormConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>396</width>
+    <height>344</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>512</width>
+    <height>420</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="qgrb_generalConf">
+     <property name="title">
+      <string>Configuración General</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <layout class="QVBoxLayout" name="vrtl_configGeneral">
+        <item>
+         <layout class="QGridLayout" name="grdl_configTmp">
+          <item row="0" column="3">
+           <widget class="QToolButton" name="tbtn_dirTmp">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLineEdit" name="ledt_dirTmp">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="qlbl_dirTmp">
+            <property name="minimumSize">
+             <size>
+              <width>119</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Directorio trabajo</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QFormLayout" name="frml_general">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="qlbl_maxResiduosMem">
+            <property name="text">
+             <string>Máx. Residuos</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="qsbx_maxrResiduosMem">
+            <property name="suffix">
+             <string> residuos</string>
+            </property>
+            <property name="prefix">
+             <string/>
+            </property>
+            <property name="minimum">
+             <number>500</number>
+            </property>
+            <property name="maximum">
+             <number>5000</number>
+            </property>
+            <property name="value">
+             <number>1000</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="qlbl_numHilos">
+            <property name="text">
+             <string>Num. Hilos Defecto</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="qsbx_numHilos">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="qgrb_reserveConf">
+     <property name="title">
+      <string>RServe</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <layout class="QVBoxLayout" name="vrtl_configRserve">
+        <item>
+         <layout class="QGridLayout" name="grdl_configFFtmp">
+          <item row="0" column="0">
+           <widget class="QLabel" name="qlbl_dirFFtmp">
+            <property name="text">
+             <string>Directorio ff Tmp </string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="ledt_dirFFtmp">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QToolButton" name="tbtn_dirFFtmp">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="grdl_ffConfig">
+          <item row="0" column="0">
+           <widget class="QLabel" name="qlbl_tamLote">
+            <property name="text">
+             <string>Tamaño Lote ff</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="qsbx_tamLote">
+            <property name="suffix">
+             <string comment="Megabytes" extracomment="Megabytes"> MB</string>
+            </property>
+            <property name="minimum">
+             <number>16</number>
+            </property>
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="qlbl_maxMemoriaFF">
+            <property name="text">
+             <string>Memoria ff</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="qsbx_maxMemoriaFF">
+            <property name="suffix">
+             <string comment="Megabytes" extracomment="Megabytes"> MB</string>
+            </property>
+            <property name="minimum">
+             <number>64</number>
+            </property>
+            <property name="maximum">
+             <number>999999999</number>
+            </property>
+            <property name="value">
+             <number>512</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="qlbl_rserveHost">
+            <property name="text">
+             <string>Rserve Host</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="ledt_rserveHost"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="qdbb_almacenar">
+     <property name="locale">
+      <locale language="Spanish" country="Colombia"/>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::RestoreDefaults|QDialogButtonBox::Save</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>qdbb_almacenar</sender>
+   <signal>accepted()</signal>
+   <receiver>DialogFormConfig</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>qdbb_almacenar</sender>
+   <signal>rejected()</signal>
+   <receiver>DialogFormConfig</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
