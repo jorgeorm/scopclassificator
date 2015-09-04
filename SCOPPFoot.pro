@@ -100,29 +100,30 @@ OTHER_FILES += DoxyGenCfg \
 ## Se debe comentar si se necesita una versión diferente de R,
 ## y setear la variable R_HOME como una variable de ambiente
 R_HOME =                $$system(R RHOME)
-#message("R_HOME is" $$R_HOME)
+R_LIBS_USER=            $$system(echo $HOME/R/x86_64-pc-linux-gnu-library/3.0)
+
 
 ## Incluye los headers y librerías para R
-RCPPFLAGS = 		$$system($$R_HOME/bin/R CMD config --cppflags)
-RLDFLAGS = 		$$system($$R_HOME/bin/R CMD config --ldflags)
+RCPPFLAGS = 		$$system(sh adds/getRcppFlags.sh)
+RLDFLAGS = 		$$system(sh adds/getRldFlags.sh)
 RBLAS = 		$$system($$R_HOME/bin/R CMD config BLAS_LIBS)
 RLAPACK = 		$$system($$R_HOME/bin/R CMD config LAPACK_LIBS)
 
 ## Si se necesita setear el paath a R manualmente descomentar
 ## y editar lo que aparece abajo
-RRPATH =		-Wl,-rpath,$$R_HOME/lib
+# RRPATH =		-Wl,-rpath,$$R_HOME/lib
 
 ## Incluye los headers y librerías para las clases interfaz para Rcpp
-RCPPINCL = 		$$system($$R_HOME/bin/Rscript -e \"Rcpp:::CxxFlags\(\)\")
-RCPPLIBS = 		$$system($$R_HOME/bin/Rscript -e \"Rcpp:::LdFlags\(\)\")
+RCPPINCL = 		$$system(sh adds/getRcpp.sh $$R_LIBS_USER -rcpp.cxx)
+RCPPLIBS = 		$$system(sh adds/getRcpp.sh $$R_LIBS_USER -rcpp.ld)
 
 ## Por alguna razón cuando se construey con Qt obtenemos esto cada vez
 ## así que ponemos no utilizado el parametro de warnings off.
-#RCPPWARNING =		-Wno-unused-parameter
+RCPPWARNING =		-Wno-unused-parameter
 
 ## Incluye los headers y las libreerías de RInside clases embebidas
-RINSIDEINCL = 		$$system($$R_HOME/bin/Rscript -e \"RInside:::CxxFlags\(\)\")
-RINSIDELIBS = 		$$system($$R_HOME/bin/Rscript -e \"RInside:::LdFlags\(\)\")
+RINSIDEINCL = 		$$system(sh adds/getRcpp.sh $$R_LIBS_USER -rinside.cxx)
+RINSIDELIBS = 		$$system(sh adds/getRcpp.sh $$R_LIBS_USER -rinside.ld)
 
 ## compiler etc settings used in default make rules
 ## Parámetros utilizados y demás en las reglas por defecto del make
