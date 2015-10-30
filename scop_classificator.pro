@@ -116,7 +116,6 @@ RLAPACK = 		$$system($$R_HOME/bin/R CMD config LAPACK_LIBS)
 R_LIBS = "./lib/R/"
 ## Installs R required packages
 message("--------------Instalation---------------")
-
 RINST = $$system($$R_HOME/bin/R CMD BATCH $$R_LIBS/installRDepencies.R)
 
 message("-------------After Install--------------$$RINST")
