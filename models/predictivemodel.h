@@ -6,8 +6,7 @@
 
 #include <models/utils/matrix.h>
 
-class PredictiveModel
-{
+class PredictiveModel{
 public:
     PredictiveModel();
 
@@ -15,13 +14,13 @@ public:
     QMap<QString, int *> getProfiles() const;
 
 
-    Matrix<float *> getRepresentativeFeatures() const;
-    void setRepresentativeFeatures(const Matrix<float *> &representativeFeatures);
+    Matrix<float> *getRepresentativeFeatures() const;
+    void setRepresentativeFeatures(Matrix<float> *representativeFeatures);
 
 
 protected:
     QMap<QString, int *> _profiles;
-    Matrix<float *> _representativeFeatures;
+    Matrix<float> *_representativeFeatures;
 };
 
 #endif // PREDICTIVEMODEL_H

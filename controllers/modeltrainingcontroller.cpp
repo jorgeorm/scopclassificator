@@ -270,7 +270,7 @@ void ModelTrainingController::onCommonFeaturesFound(QString entryName){
         qDebug() << "Just found the global features";
         emitProgress();
 
-        createPredictiveModel();
+        //createPredictiveModel();
 
         //TODO: Create model based on what was found use _pathGlobalFeatures to calculate model
 

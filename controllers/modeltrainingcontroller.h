@@ -78,6 +78,11 @@ protected:
     void emitProgress();
 
     /**
+     * @brief createPredictiveModel Generates the predictive model
+     */
+    void createPredictiveModel();
+
+    /**
      * @brief configureClusteringTask Creates Clustering procesors
      * @param entry
      * @param taskThread

@@ -10,12 +10,12 @@ void PredictiveModel::setProfiles(const QMap<QString, int *> &profiles)
     _profiles = profiles;
 }
 
-Matrix<float *> PredictiveModel::getRepresentativeFeatures() const
+Matrix<float> *PredictiveModel::getRepresentativeFeatures() const
 {
     return _representativeFeatures;
 }
 
-void PredictiveModel::setRepresentativeFeatures(const Matrix<float *> &representativeFeatures)
+void PredictiveModel::setRepresentativeFeatures(Matrix<float > *representativeFeatures)
 {
     _representativeFeatures = representativeFeatures;
 }
