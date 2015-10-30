@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/forms" lang="es">
-        <file alias="FormDataset">FormDataset.ui</file>
-    </qresource>
-</RCC>
