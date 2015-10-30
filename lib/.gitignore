@@ -1,6 +1,5 @@
 #Ignore Rlibraries
-/R/
-#Don't Ignore libInstallers
-!/R/getRflag.sh
-!/R/installRDepencies.R
+/R/*
+!getRflag.sh
+!installRDepencies.R
 *~
