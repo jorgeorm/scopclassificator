@@ -1,37 +1,51 @@
-/**
- * \file main.cpp
- * \brief Pone a correr la aplicacion e interpreta parametros de entrada
- * Captura parametros de entrada para la configuraci´on de opciones adicionales.
- * \author Jorge Ordoñez Mendez - jorge.ordonez@correounivalle.edu.co
- */
-#include "GUI_SCOPPFoot.h"
+﻿#include "mainwindow.h"
 #include <QApplication>
+#include <QProcess>
 #include <RInside.h>
-#include <QTranslator>
-#include <QLibraryInfo>
+
+#ifdef Q_OS_LINUX
+void rserveStop(){
+    QProcess psRserve;
+    psRserve.start("bash", QStringList()<<"-c"<<"ps -A | grep 'Rserve'");
+    psRserve.waitForBytesWritten();
+    psRserve.waitForFinished();
 
 
-int main(int argc, char * argv[])
+    if(! psRserve.readAll().isEmpty()){
+        QProcess kill;
+        kill.start("killall", QStringList()<<"-9"<<"Rserve");
+        kill.waitForBytesWritten();
+        kill.waitForFinished();
+    }
+}
+
+void rserveStart(RInside &R)
 {
+    rserveStop();
 
-    RInside instancia(argc, argv);
-//    system("killall -9 Rserve");
-//    system(" $R_HOME/bin/R CMD  $R_HOME/bin/Rserve  --no-save");
+    R.parseEvalQ("library('Rserve')");
+    R.parseEvalQ("Rserve(args='--no-save')");
+
+}
+#else
+void rserveStart(RInside R)
+{
+    R.parseEvalQ("library('Rserve')");
+    R.parseEvalQ("Rserve(args='--no-save')");
+}
+#endif
+
+int main(int argc, char *argv[])
+{
+    RInside R(argc, argv);  		// creates an embedded R instance
+
+    rserveStart(R);
+
     QApplication a(argc, argv);
-
-
-    QTranslator qtTranslator;
-    qtTranslator.load("qt_" + QLocale::system().name(),
-         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    a.installTranslator(&qtTranslator);
-
-    /* load our custom translations for this application */
-    QTranslator myappTranslator;
-    myappTranslator.load("myapp_" + QLocale::system().name());
-    a.installTranslator(&myappTranslator);
-
-    GUI_SCOPPFoot w(0);
+    MainWindow w(R);
     w.show();
-    
+
+    rserveStop();
+
     return a.exec();
 }
