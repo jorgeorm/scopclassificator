@@ -293,6 +293,26 @@ void MainWindow::on_clb_trainModel_clicked(){
 
 void MainWindow::on_clb_testModel_clicked(){
     if (_modelEvaluationView->isVisible()) return;
+    if (_obtainedDataset == NULL ||
+            _obtainedClassificationModel == NULL){
+
+        int ret = QMessageBox::warning(this, tr("Ooops!"),
+                                       tr("Se requiere haber configurado un dataset y un modelo cargado.\n"
+                                          "Desea continuar?"),
+                                       QMessageBox::Ok
+                                       | QMessageBox::Cancel,
+                                       QMessageBox::Ok);
+        switch (ret) {
+        case QMessageBox::Cancel:
+            return;
+            break;
+        }
+    }
+
+    if (_obtainedDataset != NULL)
+        _modelEvaluationView->setDataset(_obtainedDataset);
+    if (_obtainedClassificationModel != NULL)
+        _modelEvaluationView->setPredictiveModel(_obtainedClassificationModel);
 
     hideViews();
     _modelEvaluationView->setVisible(true);
