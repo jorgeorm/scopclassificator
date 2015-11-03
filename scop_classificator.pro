@@ -41,10 +41,11 @@ SOURCES += main.cpp\
     views/clusteringSpecificViews/claraoptions.cpp \
     services/clusteringservice.cpp \
     models/clusteringresult.cpp \
-    services/predmodelgeneratorservice.cpp \
     services/clusteringalgorithmgeneratorservice.cpp \
     controllers/modeltrainingcontroller.cpp \
-    services/algorithmservice.cpp
+    services/algorithmservice.cpp \
+    services/predictivemodelservice.cpp \
+    controllers/modelevaluationcontroller.cpp
 
 HEADERS  += mainwindow.h \
     services/datasetservice.h \
@@ -78,9 +79,10 @@ HEADERS  += mainwindow.h \
     controllers/modeltrainingcontroller.h \
     services/clusteringservice.h \
     models/clusteringresult.h \
-    services/predmodelgeneratorservice.h \
     services/clusteringalgorithmgeneratorservice.h \
-    services/algorithmservice.h
+    services/algorithmservice.h \
+    services/predictivemodelservice.h \
+    controllers/modelevaluationcontroller.h
 
 FORMS    += mainwindow.ui \
     views/datasetview.ui \

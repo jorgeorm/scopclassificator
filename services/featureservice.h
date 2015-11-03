@@ -30,12 +30,12 @@ public:
 
 
     /**
-     * @brief normalizeMatrix
+     * @brief scaleMatrixByNumber
      * @param matrix
      * @param norm
      * @return
      */
-    Matrix<float> *normalizeMatrix(const Matrix<float> *matrix, double norm = 0);
+    Matrix<float> *scaleMatrixByNumber(const Matrix<float> *matrix, double norm = 0);
 
 
     /**
@@ -59,6 +59,15 @@ public:
      * @return Path to file that has been concatenated
      */
     QString concatenateFeatureFiles(const QStringList &files);
+
+    /**
+     * @brief euclideanDistance Calculates heuclidean distance between two features
+     * @param feat1
+     * @param feat2
+     * @param featSize
+     * @return Euclidean distance as float
+     */
+    float euclideanDistance(float *feat1, float *feat2, unsigned featSize);
 //--------------------------------PROTECTED SECTION--------------------------------
 
 protected:

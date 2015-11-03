@@ -7,6 +7,7 @@ ModelEvaluationView::ModelEvaluationView(QWidget *parent) :
 
     ui->setupUi(this);
     this->setVisible(false);
+    ui->progress_qpb->setVisible(false);
 }
 
 ModelEvaluationView::~ModelEvaluationView()

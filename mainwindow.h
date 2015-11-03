@@ -60,6 +60,8 @@ private slots:
 
     void onDatasetObtained();
 
+    void onClassificationModelObtained();
+
     void onDatasetDestroyed();
 
     void onFeatureConfigObtained();

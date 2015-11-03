@@ -15,7 +15,8 @@ Matrix<float> *FeatureService::localFeaturesMatrix(FeatureDefinition *featureCon
     return calculateLocalFeatures(featureConfig, entry);
 }
 
-Matrix<float> *FeatureService::normalizeMatrix(const Matrix<float> *matrix, double norm){
+
+Matrix<float> *FeatureService::scaleMatrixByNumber(const Matrix<float> *matrix, double norm){
 
     double _norm = norm;
     double meassure;
@@ -31,6 +32,7 @@ Matrix<float> *FeatureService::normalizeMatrix(const Matrix<float> *matrix, doub
             normalized->setValue(i, j, meassure / _norm);
         }
     }
+    normalized->setScaled(true);
 
     return normalized;
 }
@@ -76,31 +78,28 @@ Matrix<float> *FeatureService::loadCalculatedMatrix(QString filePath){
 
     if (loadFile.open(QIODevice::ReadOnly)){
 
-        QTextStream dataStream(&loadFile);
         QTextStream istream(&loadFile);
-
         QString line = istream.readLine();
         QStringList values = line.split(",");
         QString value;
 
         int nRows = 0;
-
-        dataStream.readLine();
-
-        qDebug() << "Header Line: " << line;
-
-        while (dataStream.atEnd()){
+        while (! istream.atEnd()){
+            line = istream.readLine();
             ++nRows;
         }
+        istream.seek(0);
+        istream.readLine();
 
-        matrix = new Matrix<float> (nRows, values.size() - 1);
+        unsigned cols = values.size() - 1;
+        matrix = new Matrix<float> (nRows, cols);
 
         nRows = 0;
         while (! istream.atEnd()){
             line = istream.readLine();
             values = line.split(",");
 
-            for(int i = 1; values.size(); ++i){
+            for(int i = 1; i < values.size(); ++i){
                 value = values.at(i);
                 matrix->operator ()(nRows, i-1) = value.toFloat();
             }
@@ -187,6 +186,14 @@ QString FeatureService::concatenateFeatureFiles(const QStringList &files){
     return outputPath;
 }
 
+float FeatureService::euclideanDistance(float *feat1, float *feat2, unsigned featSize){
+    float distance = 0;
+    for(int i = 0; i < featSize; ++i) {
+        distance += pow((feat1[i] - feat2[i]), 2.0);
+    }
+    return sqrt(distance);
+}
+
 Matrix<float> *FeatureService::calculateLocalFeatures(FeatureDefinition *featureConfig, SCOPEntry *entry) {
 
     Matrix<float> *rawMetrics;
@@ -254,8 +261,8 @@ Matrix<float> *FeatureService::rawMetricsMatrix(
         angles = calculateMetricsMatrix(
                     FeatureDefinition::Angle, entry);
 
-        normalizedAngles = this->normalizeMatrix(angles);
-        normalizedDistances = this->normalizeMatrix(distances);
+        normalizedAngles = this->scaleMatrixByNumber(angles);
+        normalizedDistances = this->scaleMatrixByNumber(distances);
 
         rawMetrics = mixMetricMatrices(normalizedDistances,
                                        normalizedAngles);

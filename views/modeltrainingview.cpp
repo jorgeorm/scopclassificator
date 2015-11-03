@@ -11,6 +11,7 @@ ModelTrainingView::ModelTrainingView(QWidget *parent) :
     _controllerThread(){
 //    connect(&_controllerThread, SIGNAL(finished()),
 //            &_controller, SLOT(deleteLater()));
+    ui->progressBar->setVisible(false);
 
     ui->setupUi(this);
     this->setVisible(false);
@@ -111,9 +112,11 @@ void ModelTrainingView::onDatasetChanged(){
 void ModelTrainingView::onModelFound(){
     if (! ui->generate_btn->isEnabled()) ui->generate_btn->setEnabled(true);
     if (ui->stop_btn->isEnabled()) ui->stop_btn->setEnabled(false);
-    if (ui->save_btn->isEnabled()) ui->save_btn->setEnabled(true);
+    if (! ui->save_btn->isEnabled()) ui->save_btn->setEnabled(true);
 
     ui->progressBar->setValue(100);
+    emit stepCompleted();
+    emit notify("Model obtained");
 }
 
 FeatureDefinition *ModelTrainingView::featureDef() const
@@ -129,8 +132,15 @@ void ModelTrainingView::setFeatureDef(FeatureDefinition *featureDef)
     }
 }
 
-Dataset *ModelTrainingView::dataset() const
-{
+void ModelTrainingView::setModel(PredictiveModel *model){
+    _controller.setPredictiveModel(model);
+}
+
+PredictiveModel *ModelTrainingView::model(){
+    return _controller.predictiveModel();
+}
+
+Dataset *ModelTrainingView::dataset() const{
     return _controller.dataset ();
 }
 
@@ -157,6 +167,7 @@ void ModelTrainingView::on_generate_btn_clicked(){
     ui->generate_btn->setEnabled(false);
     if (! ui->stop_btn->isEnabled()) ui->stop_btn->setEnabled(true);
     if (ui->save_btn->isEnabled()) ui->save_btn->setEnabled(false);
+    ui->taskProgress_qpb->setVisible(true);
 
     _controller.setSpecificParams(_currentOptions->optionsAsString());
     _controllerThread.start();

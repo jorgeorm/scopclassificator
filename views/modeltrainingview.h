@@ -49,6 +49,9 @@ public:
      */
     void setFeatureDef(FeatureDefinition *featureDef);
 
+    void setModel(PredictiveModel *model);
+    PredictiveModel *model();
+
 signals:
     /**
      * @brief datasetChanged Notifies changes on dataset
@@ -58,6 +61,17 @@ signals:
      * @brief featureDefChanged Notifies changes on feature definition
      */
     void featureDefChanged();
+
+    /**
+     * @brief stepCompleted Notifies once a model has been obtained and loaded into the view
+     */
+    void stepCompleted();
+
+    /**
+     * @brief notify Notifies a event into the view
+     * @param event
+     */
+    void notify(QString event);
 
 private slots:
     void on_clustTech_qcbx_activated(int index);

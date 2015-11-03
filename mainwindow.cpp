@@ -42,6 +42,11 @@ void MainWindow::initParams()
     connect(_featureView, SIGNAL(notify(QString)),
             this, SLOT(notifyEvent(QString)));
 
+    connect(_modelTrainingView, SIGNAL(stepCompleted()),
+            this, SLOT(onClassificationModelObtained()));
+    connect(_modelTrainingView, SIGNAL(notify(QString)),
+            this, SLOT(notifyEvent(QString)));
+
     QLayout *variableLayout = ui->variableWidget->layout();
 
     if (variableLayout == NULL){
@@ -171,6 +176,21 @@ void MainWindow::onDatasetObtained(){
     hideViews();
 }
 
+void MainWindow::onClassificationModelObtained(){
+    _obtainedClassificationModel = _modelTrainingView->model();
+
+    // Enables next step
+    ui->clb_selectDataset->setChecked(false);
+    ui->clb_defineCharact->setChecked(false);
+    ui->clb_trainModel->setChecked(false);
+    ui->clb_testModel->setEnabled(true);
+    ui->clb_testModel->setChecked(true);
+
+    // -- removing and enabling uis
+    // fadeInVariableWidget(false);
+    // hideViews();
+}
+
 void MainWindow::onDatasetDestroyed(){
     if(ui->clb_defineCharact->isEnabled()) ui->clb_defineCharact->setEnabled(false);
 
@@ -273,7 +293,10 @@ void MainWindow::on_clb_trainModel_clicked(){
 
 void MainWindow::on_clb_testModel_clicked(){
     if (_modelEvaluationView->isVisible()) return;
+
     hideViews();
+    _modelEvaluationView->setVisible(true);
+    ui->variableWidget->setEnabled(true);
 
 }
 

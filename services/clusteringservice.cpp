@@ -95,7 +95,7 @@ void ClusteringService::findCommonFeatures(){
         if (_useEntry) {
 
             features = featureCalc.localFeaturesMatrix(_featDef,_entry);
-            _matrix = featureCalc.normalizeMatrix(features);
+            _matrix = featureCalc.scaleMatrixByNumber(features);
 
             delete features;
             features = NULL;
