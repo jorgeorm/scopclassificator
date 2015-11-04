@@ -11,10 +11,10 @@ ModelTrainingView::ModelTrainingView(QWidget *parent) :
     _controllerThread(){
 //    connect(&_controllerThread, SIGNAL(finished()),
 //            &_controller, SLOT(deleteLater()));
-    ui->progressBar->setVisible(false);
 
     ui->setupUi(this);
     this->setVisible(false);
+    ui->progressBar->setVisible(false);
 
 
 
@@ -167,7 +167,7 @@ void ModelTrainingView::on_generate_btn_clicked(){
     ui->generate_btn->setEnabled(false);
     if (! ui->stop_btn->isEnabled()) ui->stop_btn->setEnabled(true);
     if (ui->save_btn->isEnabled()) ui->save_btn->setEnabled(false);
-    ui->taskProgress_qpb->setVisible(true);
+    ui->progressBar->setVisible(true);
 
     _controller.setSpecificParams(_currentOptions->optionsAsString());
     _controllerThread.start();

@@ -7,7 +7,6 @@
 
 #include <models/dataset.h>
 #include <models/featuredefinition.h>
-#include <models/modelevaluation.h>
 #include <models/predictivemodel.h>
 
 #include <views/datasetview.h>
@@ -85,7 +84,6 @@ private:
     Dataset *_obtainedDataset;
     FeatureDefinition *_obtainedFeaturesConf;
     PredictiveModel *_obtainedClassificationModel;
-    ModelEvaluation * _obtainedModelEvaluation;
 
     //Aditional Views
     DatasetView * _datasetView;

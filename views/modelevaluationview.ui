@@ -91,7 +91,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="save_qpb">
          <property name="text">
           <string>Almacenar</string>
          </property>

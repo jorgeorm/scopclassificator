@@ -1,10 +1,13 @@
 ﻿#include "modelevaluationcontroller.h"
 
+#include <services/datasetservice.h>
+#include <services/predictivemodelservice.h>
+#include <services/scopentryservice.h>
+
 ModelEvaluationController::ModelEvaluationController(QObject *parent) : QObject(parent)
 {
     _dataset = NULL;
     _predictiveModel = NULL;
-    _modelEvaluation = NULL;
 }
 
 Dataset *ModelEvaluationController::dataset() const
@@ -25,5 +28,54 @@ PredictiveModel *ModelEvaluationController::predictiveModel() const
 void ModelEvaluationController::setPredictiveModel(PredictiveModel *predictiveModel)
 {
     _predictiveModel = predictiveModel;
+}
+
+void ModelEvaluationController::loadData(){
+    PredictedClassification *classification = NULL;
+    DatasetService dsLoader;
+
+    QList<SCOPEntry *> entries = dsLoader.proteins(*_dataset);
+    foreach (SCOPEntry *entry, entries) {
+        classification = new PredictedClassification();
+        classification->setEntry(entry);
+        _classifications.append(classification);
+    }
+    emit dataLoaded();
+}
+
+void ModelEvaluationController::saveModel(QString path){
+
+    emit evaluationStored();
+}
+
+void ModelEvaluationController::evaluateClassifier(){
+    PredictiveModelService evaluator;
+    QString classTag = "";
+    SCOPEntry *entry = NULL;
+
+    if (_predictiveModel == NULL) {
+        qDebug() << "The model is empty: ";
+        return;
+    }
+
+    foreach (PredictedClassification *classification,
+             _classifications) {
+        entry = classification->entry();
+        classTag = evaluator.classify(_predictiveModel,
+                                      entry);
+        classification->setClassification(classTag);
+    }
+
+    emit classifierEvaluated();
+}
+
+QList<PredictedClassification *> ModelEvaluationController::classifications() const
+{
+    return _classifications;
+}
+
+void ModelEvaluationController::setClassifications(const QList<PredictedClassification *> &classifications)
+{
+    _classifications = classifications;
 }
 

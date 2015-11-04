@@ -18,7 +18,7 @@ class ModelEvaluationView : public QGroupBox
 
 public:
     explicit ModelEvaluationView(QWidget *parent = 0);
-    ~ModelEvaluationView();
+    virtual ~ModelEvaluationView();
 
 
     Dataset *dataset() const;
@@ -26,6 +26,15 @@ public:
 
     PredictiveModel *predictiveModel() const;
     void setPredictiveModel(PredictiveModel *predictiveModel);
+
+private slots:
+    void on_loadEntities_qpb_clicked();
+
+    void on_evaluate_qpb_clicked();
+
+    void on_save_qpb_clicked();
+
+    void onTestDataLoaded();
 
 private:
     Ui::ModelEvaluationView *ui;

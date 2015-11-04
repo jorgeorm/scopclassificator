@@ -20,7 +20,6 @@ void MainWindow::initParams()
     _obtainedDataset = NULL;
     _obtainedFeaturesConf = NULL;
     _obtainedClassificationModel = NULL;
-    _obtainedModelEvaluation = NULL;
 
 
     // Init other UI forms used
@@ -92,8 +91,6 @@ MainWindow::~MainWindow()
     if (_obtainedDataset != NULL) delete _obtainedDataset;
     if (_obtainedFeaturesConf != NULL) delete _obtainedFeaturesConf;
     if (_obtainedClassificationModel != NULL) delete _obtainedClassificationModel;
-    if (_obtainedModelEvaluation != NULL) delete _obtainedModelEvaluation;
-
 
     if(_datasetView != NULL) delete _datasetView;
     if(_featureView != NULL) delete _featureView;
@@ -177,7 +174,9 @@ void MainWindow::onDatasetObtained(){
 }
 
 void MainWindow::onClassificationModelObtained(){
+    qDebug() << "Just obtained the model: ";
     _obtainedClassificationModel = _modelTrainingView->model();
+    qDebug() << "Model data => profileLength " << _obtainedClassificationModel->profileLength();
 
     // Enables next step
     ui->clb_selectDataset->setChecked(false);

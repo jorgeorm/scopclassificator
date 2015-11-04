@@ -22,7 +22,7 @@ public:
     QString classify(PredictiveModel *model = NULL,
                      Matrix<float> *localFeatures = NULL);
     QString classify(PredictiveModel *model = NULL,
-                     unsigned *profile = NULL);
+                     float *profile = NULL);
 
     float *getProfile(Matrix<float> *representativeFeatures = NULL,
                          SCOPEntry *entry = NULL,
@@ -37,7 +37,8 @@ public:
 protected:
     float cosineSimilarity(float *profile1,
                            float *profile2,
-                           unsigned profileSize);
+                           unsigned profileSize) const;
+    void scaleProfile(float *profile, float *scaleValues, unsigned profileLength);
 
 };
 

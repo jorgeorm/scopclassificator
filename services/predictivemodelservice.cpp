@@ -37,6 +37,7 @@ QString PredictiveModelService::classify(PredictiveModel *model, SCOPEntry *entr
         Matrix<float> *lclFeatures = featGenerator.localFeaturesMatrix(featDef,
                                                                         entry);
         return classify(model, lclFeatures);
+        delete lclFeatures;
     }
 
     return classification;
@@ -44,22 +45,53 @@ QString PredictiveModelService::classify(PredictiveModel *model, SCOPEntry *entr
 
 QString PredictiveModelService::classify(PredictiveModel *model, Matrix<float> *localFeatures){
     QString classification = "";
-    float similarity = 0;
-    float greatestSimil = 0;
+
 
     if (model != NULL && localFeatures != NULL){
         float *profile = getProfile(model->representativeFeatures(), localFeatures);
-        QString classTag;
+        if(model->hasScaledProfile()){
+            scaleProfile(profile, model->scaleValuesByFeat(), model->profileLength());
+        }
+        classification = classify(model, profile);
+    }
+    return classification;
+}
+
+QString PredictiveModelService::classify(PredictiveModel *model, float *profile){
+    QString classTag = "";
+    float similarity = 0;
+    float greatestSimil = 0;
+
+
+    QDebug dbg = qDebug() << "Profile to classifi: ";
+
+    for(unsigned i = 0; i < model->profileLength(); ++i){
+        dbg << profile[i];
+        if (i < model->profileLength() - 1) dbg << ", ";
+    }
+    dbg << endl;
+
+    if (model != NULL && profile != NULL){
+
+        dbg << "Profile pre-calculated";
+        for(unsigned i = 0; i < model->profileLength(); ++i){
+            dbg << model->profiles().value(classTag)[i];
+            if (i < model->profileLength() - 1) dbg << ", ";
+        }
+        dbg << endl;
+
         QMap<QString, float *> profiles = model->profiles();
         foreach (classTag, profiles.keys()) {
             similarity = cosineSimilarity(profiles.value(classTag), profile, model->profileLength());
+
             if(similarity > greatestSimil){
                 greatestSimil = similarity;
-                classification = classTag;
+                classTag = classTag;
             }
         }
     }
-    return classification;
+
+    return classTag;
 }
 
 float *PredictiveModelService::getProfile(Matrix<float> *representativeFeatures,
@@ -142,7 +174,7 @@ void PredictiveModelService::scaleProfiles(PredictiveModel *model, float *scaleV
         float *profileTmp = NULL;
         foreach(QString classTag, model->profiles().keys()){
             profileTmp = model->profile(classTag);
-            for (unsigned i = 0; i < profileLength; ++i) profileTmp[i] = profileTmp[i] / scaleValues[i];
+            scaleProfile(profileTmp, scaleValues, profileLength);
         }
         model->setProfileScaleFactors(scaleValues);
     }
@@ -203,7 +235,7 @@ void PredictiveModelService::saveModel(PredictiveModel *model, QString file){
 
 float PredictiveModelService::cosineSimilarity(float *profile1,
                                                float *profile2,
-                                               unsigned profileSize){
+                                               unsigned profileSize) const{
     float dotProduct, magnitude1, magnitude2;
     if (profile1 != NULL && profile2 != NULL){
         dotProduct = 0;
@@ -222,6 +254,12 @@ float PredictiveModelService::cosineSimilarity(float *profile1,
         return dotProduct / (magnitude1 * magnitude2);
     }
     else return 0;
+}
+
+void PredictiveModelService::scaleProfile(float *profile, float *scaleValues, unsigned profileLength){
+    for(unsigned i = 0; i < profileLength; ++i) {
+        profile[i] = profile[i] / scaleValues[i];
+    }
 }
 
 

@@ -4,7 +4,7 @@
 #include <QObject>
 
 #include <models/dataset.h>
-#include <models/modelevaluation.h>
+#include <models/predictedclassification.h>
 #include <models/predictivemodel.h>
 
 class ModelEvaluationController : public QObject
@@ -12,9 +12,6 @@ class ModelEvaluationController : public QObject
     Q_OBJECT
 public:
     explicit ModelEvaluationController(QObject *parent = 0);
-    virtual ~ModelEvaluationController();
-
-
 
     Dataset *dataset() const;
     void setDataset(Dataset *dataset);
@@ -22,14 +19,22 @@ public:
     PredictiveModel *predictiveModel() const;
     void setPredictiveModel(PredictiveModel *predictiveModel);
 
-signals:
+    QList<PredictedClassification *> classifications() const;
+    void setClassifications(const QList<PredictedClassification *> &classifications);
 
+signals:
+    void dataLoaded();
+    void evaluationStored();
+    void classifierEvaluated();
 public slots:
+    void loadData();
+    void saveModel(QString path);
+    void evaluateClassifier();
 
 private:
     Dataset *_dataset;
     PredictiveModel *_predictiveModel;
-    ModelEvaluation *_modelEvaluation;
+    QList<PredictedClassification*> _classifications;
 };
 
 #endif // MODELEVALUATIONCONTROLLER_H
