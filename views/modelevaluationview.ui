@@ -1,10 +1,7 @@
-<?xml version='1.0'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>ModelEvaluationView</class>
- <widget name="ModelEvaluationView" class="QGroupBox">
-  <property name="title">
-   <string>GroupBox</string>
-  </property>
+ <widget class="QGroupBox" name="ModelEvaluationView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +11,123 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>GroupBox</string>
+   <string>Evaluar modelo</string>
   </property>
+  <property name="title">
+   <string>Evaluar Modelo</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="form_qhbl">
+     <item>
+      <layout class="QVBoxLayout" name="form_qvbl">
+       <item>
+        <layout class="QHBoxLayout" name="distance_qhbl">
+         <item>
+          <widget class="QLabel" name="distance_lbl">
+           <property name="text">
+            <string>Distancia</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="distance_cbx">
+           <item>
+            <property name="text">
+             <string>Euclideana</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Coseno</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="pathEntities_qhbl">
+         <item>
+          <widget class="QToolButton" name="pathEntities_qtb">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="pathEntities_qle">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="placeholderText">
+            <string>Path a archivos .ent a probar</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="actions_qvbl">
+       <item>
+        <widget class="QPushButton" name="loadEntities_qpb">
+         <property name="text">
+          <string>Cargar</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="evaluate_qpb">
+         <property name="text">
+          <string>Evaluar</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="save_qpb">
+         <property name="text">
+          <string>Almacenar</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableView" name="modelEvaluation_qtv"/>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="progress_qpb">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>8</height>
+      </size>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
+ <resources/>
+ <connections/>
 </ui>

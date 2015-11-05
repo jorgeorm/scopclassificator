@@ -33,7 +33,6 @@ SOURCES += main.cpp\
     controllers/featurecontroller.cpp \
     services/featureservice.cpp \
     views/modelevaluationview.cpp \
-    models/modelevaluation.cpp \
     models/utils/matrix.cpp \
     services/featuregraphicsservice.cpp \
     views/modeltrainingview.cpp \
@@ -41,10 +40,12 @@ SOURCES += main.cpp\
     views/clusteringSpecificViews/claraoptions.cpp \
     services/clusteringservice.cpp \
     models/clusteringresult.cpp \
-    services/predmodelgeneratorservice.cpp \
     services/clusteringalgorithmgeneratorservice.cpp \
     controllers/modeltrainingcontroller.cpp \
-    services/algorithmservice.cpp
+    services/algorithmservice.cpp \
+    services/predictivemodelservice.cpp \
+    controllers/modelevaluationcontroller.cpp \
+    models/predictedclassification.cpp
 
 HEADERS  += mainwindow.h \
     services/datasetservice.h \
@@ -69,7 +70,6 @@ HEADERS  += mainwindow.h \
     controllers/featurecontroller.h \
     services/featureservice.h \
     views/modelevaluationview.h \
-    models/modelevaluation.h \
     models/utils/matrix.h \
     services/featuregraphicsservice.h \
     views/modeltrainingview.h \
@@ -78,9 +78,11 @@ HEADERS  += mainwindow.h \
     controllers/modeltrainingcontroller.h \
     services/clusteringservice.h \
     models/clusteringresult.h \
-    services/predmodelgeneratorservice.h \
     services/clusteringalgorithmgeneratorservice.h \
-    services/algorithmservice.h
+    services/algorithmservice.h \
+    services/predictivemodelservice.h \
+    controllers/modelevaluationcontroller.h \
+    models/predictedclassification.h
 
 FORMS    += mainwindow.ui \
     views/datasetview.ui \

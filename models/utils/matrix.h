@@ -15,6 +15,8 @@ public:
 
     unsigned cols() const;
 
+    T* row(unsigned i) const;
+
     T valueAt(unsigned i, unsigned j) const;
 
 //    std::vector<std::vector<T>> data() const;
@@ -48,6 +50,13 @@ public:
      */
     void setValue(unsigned i, unsigned j, T value);
 
+    /**
+     * @brief scaled Indicates if the matrix has been scaled
+     * @return
+     */
+    bool scaled() const;
+    void setScaled(bool flag);
+
 signals:
     void dataChanged();
 
@@ -59,6 +68,7 @@ private:
 
     unsigned _rows;
     unsigned _cols;
+    bool _scaled;
     T _maxVal;
     T** _data;
 };

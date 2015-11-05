@@ -217,12 +217,12 @@ double Residue::operator-(const Bio::Residue &other)
         return *atomI - *atomJ;
     } else {
 
-        qDebug() << " ----There was an error with the following residues"
-                 << this->shortLenghtName() << ": " << this->seqNo()
-                 << ", " << other.shortLenghtName() << ": " << other.seqNo();
+//        qDebug() << " ----There was an error with the following residues"
+//                 << this->shortLenghtName() << ": " << this->seqNo()
+//                 << ", " << other.shortLenghtName() << ": " << other.seqNo();
 
-        if(atomI == NULL) qDebug() << " ---- First atom NULL ";
-        else qDebug() << " ---- Second atom NULL ";
+//        if(atomI == NULL) qDebug() << " ---- First atom NULL ";
+//        else qDebug() << " ---- Second atom NULL ";
 
         return std::numeric_limits<double>::max();
     }

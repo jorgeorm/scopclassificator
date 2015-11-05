@@ -3,6 +3,7 @@
 #include <services/algorithmservice.h>
 #include <services/datasetservice.h>
 #include <services/featureservice.h>
+#include <services/predictivemodelservice.h>
 #include <QStringBuilder>
 
 #include <QDateTime>
@@ -14,6 +15,10 @@ ModelTrainingController::ModelTrainingController(QObject *parent) : QObject(pare
     _threadCount = 0;
     _processedEntries = 0;
     _startedEntries = 0;
+    _globalCommonFeatures = NULL;
+    _model = NULL;
+    _dataset = NULL;
+    _featureDef = NULL;
 }
 
 ModelTrainingController::~ModelTrainingController(){
@@ -36,6 +41,7 @@ ModelTrainingController::~ModelTrainingController(){
     if (! _entries.isEmpty()){
         qDeleteAll(_entries);
     }
+    _entries.clear();
 
 }
 
@@ -107,7 +113,7 @@ void ModelTrainingController::findModel()
     runLocalCommonSearchs();
     //TODO: Remove this to avoid processing if the file exists:
     if(_threadCount == 0) {
-        runGlobalCommonSearch();
+        obtainModel();
         emitProgress();
         emit modelFound();
     }
@@ -163,7 +169,7 @@ void ModelTrainingController::runLocalCommonSearchs()
     }
 }
 
-void ModelTrainingController::runGlobalCommonSearch(){
+QString ModelTrainingController::runGlobalCommonSearch(){
 
     AlgorithmService coder;
     ClusteringService clusteringTask;
@@ -171,7 +177,7 @@ void ModelTrainingController::runGlobalCommonSearch(){
     QDate myDate = QDate::currentDate();
     FeatureService featureConcatenator;
 
-    _pathGlobalFeatures = "/tmp/globalClusters_" %
+    QString globlCommnFeats_path = "/tmp/globalClusters_" %
             myDate.toString("yyyy-MM-dd") % ".csv";
 
     localFeaturesFound = featureConcatenator.concatenateFeatureFiles(_localFeatureFiles);
@@ -181,7 +187,7 @@ void ModelTrainingController::runGlobalCommonSearch(){
     algorithm = coder.algorithm(_clusteringTech) %
             QString::number(_globalClusters)%
             ", " % _specificParams % ");";
-    postAlgorithm = coder.postAlgorithm(_clusteringTech, _pathGlobalFeatures);
+    postAlgorithm = coder.postAlgorithm(_clusteringTech, globlCommnFeats_path);
 
     clusteringTask.setName (QString("Global"));
     clusteringTask.setPathDataFile(localFeaturesFound);
@@ -195,8 +201,8 @@ void ModelTrainingController::runGlobalCommonSearch(){
             this, SLOT(onClusteringError(QString)));
 
     clusteringTask.findCommonFeatures();
-    ++_processedEntries;
-    emitProgress();
+
+    return globlCommnFeats_path;
 }
 
 void ModelTrainingController::freeResourcesForEntry(QString entryName){
@@ -220,70 +226,37 @@ void ModelTrainingController::freeResourcesForEntry(QString entryName){
 
 }
 
-void ModelTrainingController::addDetailsToOutput(QString entryName){
-    unsigned featureSize = _featureDef->sqrtSize();
-    unsigned computedFeatureSize = featureSize*featureSize;
-    QString outputFile, features;
+void ModelTrainingController::obtainModel(){
+    PredictiveModelService modelGenerator;
+    FeatureService featureLoader;
 
-    if (entryName == "Global"){
-        features = QString::number(_globalClusters);
-        QDate myDate = QDate::currentDate();
-        outputFile = "/tmp/globalClusters_" %
-                myDate.toString("yyyy-MM-dd") % ".csv";
-    } else {
-        features = QString::number(_localClusters);
-        outputFile = "/tmp/localClusters_" %
-                entryName % ".csv";
-    }
-
-
-    QString addRowsNColsCommand =
-            "echo 'features: " %
-            features %
-            ", featureSize: " %
-            QString::number(computedFeatureSize) %
-            "' | cat - " % outputFile %
-            " > temp && mv temp " % outputFile;
-
-    int res = system(addRowsNColsCommand.toStdString().c_str());
-
-    if (res != 0) {
-        emit onClusteringError(entryName);
-        qDebug() << "There was an error with this command: " << addRowsNColsCommand;
-    }
+    _pathGlobalFeatures = runGlobalCommonSearch();
+    _globalCommonFeatures = featureLoader.loadCalculatedMatrix(_pathGlobalFeatures);
+    _globalCommonFeatures->setScaled(true);
+    _model = modelGenerator.generateModel(_entries, _globalCommonFeatures, _featureDef);
+    modelGenerator.scaleProfiles(_model);
 }
 
 void ModelTrainingController::onCommonFeaturesFound(QString entryName){
 
     ++_processedEntries;
-
-    //addDetailsToOutput(entryName); // Adds metadata to the output of the clustering algorithm
-
     _localFeatureFiles.append("/tmp/localClusters_" % entryName % ".csv");
 
     freeResourcesForEntry(entryName);// Stop threads and free resources in regards of the entryname
-
     runLocalCommonSearchs();// Creates new clustering tasks if there are pending entries to be processed
+    emitProgress();
 
-    if (_processedEntries == (unsigned) _entries.size ()){
-        runGlobalCommonSearch();
-        qDebug() << "Just found the global features";
+    if (entryName != "Global" && _processedEntries == (unsigned) _entries.size ()){
+        obtainModel();
         emitProgress();
-
-        //createPredictiveModel();
-
-        //TODO: Create model based on what was found use _pathGlobalFeatures to calculate model
-
         emit modelFound();
     }
-
-    emitProgress();
 
 }
 
 void ModelTrainingController::saveModel(QString filePath){
-    //TODO: Store model obtained
-    qDebug() << "Gonna save the model obtained in: " << filePath;
+    PredictiveModelService saver;
+    saver.saveModel(_model, filePath);
 }
 
 void ModelTrainingController::onClusteringError(QString scriptPath){
@@ -310,6 +283,14 @@ FeatureDefinition *ModelTrainingController::featureDef() const
 void ModelTrainingController::setFeatureDef(FeatureDefinition *featureDef)
 {
     _featureDef = featureDef;
+}
+
+PredictiveModel *ModelTrainingController::predictiveModel(){
+    return _model;
+}
+
+void ModelTrainingController::setPredictiveModel(PredictiveModel *model){
+    _model = model;
 }
 
 Dataset *ModelTrainingController::dataset() const

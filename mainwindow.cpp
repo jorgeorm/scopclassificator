@@ -20,7 +20,6 @@ void MainWindow::initParams()
     _obtainedDataset = NULL;
     _obtainedFeaturesConf = NULL;
     _obtainedClassificationModel = NULL;
-    _obtainedModelEvaluation = NULL;
 
 
     // Init other UI forms used
@@ -40,6 +39,11 @@ void MainWindow::initParams()
     connect(_featureView, SIGNAL(stepCompleted()),
             this, SLOT (onFeatureConfigObtained()));
     connect(_featureView, SIGNAL(notify(QString)),
+            this, SLOT(notifyEvent(QString)));
+
+    connect(_modelTrainingView, SIGNAL(stepCompleted()),
+            this, SLOT(onClassificationModelObtained()));
+    connect(_modelTrainingView, SIGNAL(notify(QString)),
             this, SLOT(notifyEvent(QString)));
 
     QLayout *variableLayout = ui->variableWidget->layout();
@@ -87,8 +91,6 @@ MainWindow::~MainWindow()
     if (_obtainedDataset != NULL) delete _obtainedDataset;
     if (_obtainedFeaturesConf != NULL) delete _obtainedFeaturesConf;
     if (_obtainedClassificationModel != NULL) delete _obtainedClassificationModel;
-    if (_obtainedModelEvaluation != NULL) delete _obtainedModelEvaluation;
-
 
     if(_datasetView != NULL) delete _datasetView;
     if(_featureView != NULL) delete _featureView;
@@ -169,6 +171,23 @@ void MainWindow::onDatasetObtained(){
     // -- removing and enabling uis
     fadeInVariableWidget(false);
     hideViews();
+}
+
+void MainWindow::onClassificationModelObtained(){
+    qDebug() << "Just obtained the model: ";
+    _obtainedClassificationModel = _modelTrainingView->model();
+    qDebug() << "Model data => profileLength " << _obtainedClassificationModel->profileLength();
+
+    // Enables next step
+    ui->clb_selectDataset->setChecked(false);
+    ui->clb_defineCharact->setChecked(false);
+    ui->clb_trainModel->setChecked(false);
+    ui->clb_testModel->setEnabled(true);
+    ui->clb_testModel->setChecked(true);
+
+    // -- removing and enabling uis
+    // fadeInVariableWidget(false);
+    // hideViews();
 }
 
 void MainWindow::onDatasetDestroyed(){
@@ -273,7 +292,30 @@ void MainWindow::on_clb_trainModel_clicked(){
 
 void MainWindow::on_clb_testModel_clicked(){
     if (_modelEvaluationView->isVisible()) return;
+    if (_obtainedDataset == NULL ||
+            _obtainedClassificationModel == NULL){
+
+        int ret = QMessageBox::warning(this, tr("Ooops!"),
+                                       tr("Se requiere haber configurado un dataset y un modelo cargado.\n"
+                                          "Desea continuar?"),
+                                       QMessageBox::Ok
+                                       | QMessageBox::Cancel,
+                                       QMessageBox::Ok);
+        switch (ret) {
+        case QMessageBox::Cancel:
+            return;
+            break;
+        }
+    }
+
+    if (_obtainedDataset != NULL)
+        _modelEvaluationView->setDataset(_obtainedDataset);
+    if (_obtainedClassificationModel != NULL)
+        _modelEvaluationView->setPredictiveModel(_obtainedClassificationModel);
+
     hideViews();
+    _modelEvaluationView->setVisible(true);
+    ui->variableWidget->setEnabled(true);
 
 }
 

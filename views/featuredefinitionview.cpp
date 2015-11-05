@@ -8,6 +8,7 @@ FeatureDefinition::GeneratorMethod FeatureDefinitionView::selectedMethod()
     FeatureDefinition::GeneratorMethod gen;
 
     int currentIndex = ui->featMethod_qcb->currentIndex();
+    ui->taskProgress_qpb->setVisible(false);
 
     switch (currentIndex){
     case 0:
@@ -142,6 +143,8 @@ void FeatureDefinitionView::taskNotified(QString task){
 }
 
 void FeatureDefinitionView::displayProgress(unsigned int progress){
+    if(! ui->taskProgress_qpb->isVisible())
+        ui->taskProgress_qpb->setVisible(true);
     ui->taskProgress_qpb->setValue((int) progress);
 }
 

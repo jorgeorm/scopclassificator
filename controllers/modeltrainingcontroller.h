@@ -9,6 +9,7 @@
 
 #include <models/dataset.h>
 #include <models/featuredefinition.h>
+#include <models/predictivemodel.h>
 
 class ModelTrainingController : public QObject
 {
@@ -42,6 +43,9 @@ public:
 
     FeatureDefinition *featureDef() const;
     void setFeatureDef(FeatureDefinition *featureDef);
+
+    PredictiveModel *predictiveModel();
+    void setPredictiveModel(PredictiveModel *model);
 
 signals:
     /**
@@ -78,11 +82,6 @@ protected:
     void emitProgress();
 
     /**
-     * @brief createPredictiveModel Generates the predictive model
-     */
-    void createPredictiveModel();
-
-    /**
      * @brief configureClusteringTask Creates Clustering procesors
      * @param entry
      * @param taskThread
@@ -98,9 +97,10 @@ protected:
     void runLocalCommonSearchs();
 
     /**
-     * @brief runGlobalCommonSearch Creates final clustering process
+     * @brief runGlobalCommonSearch Runs clustering altorithm on common local features found
+     * @return path to Global common local features found
      */
-    void runGlobalCommonSearch();
+    QString runGlobalCommonSearch();
 
     /**
      * @brief freeResourcesForEntry Stop and deletes pointer related to an entry name
@@ -109,13 +109,12 @@ protected:
     void freeResourcesForEntry(QString entryName);
 
     /**
-     * @brief addDetailsToOutput Parses the amount of features and featuresize to the matrix file
-     * @param entryName
+     * @brief obtainModel Obtains the classificaiton model based on the local common features found
      */
-    void addDetailsToOutput(QString entryName);
-
+    void obtainModel();
+    
 private:
-    QString _clusteringTech,_specificParams, _pathDataFrame, _pathGlobalFeatures;
+    QString _clusteringTech, _specificParams, _pathGlobalFeatures;
     unsigned _maxThreads, _localClusters,
     _globalClusters, _startedEntries,
     _processedEntries, _threadCount;
@@ -130,7 +129,8 @@ private:
     QStringList _localFeatureFiles;
 
     QList<unsigned> _globalMedoids;
-    Matrix<float> *_localCommonFeatures, *_globalCommonFeatures;
+    Matrix<float> *_globalCommonFeatures;
+    PredictiveModel *_model;
     bool _cancelSearch;
 };
 

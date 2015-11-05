@@ -17,6 +17,7 @@ Matrix<T>::Matrix(unsigned rows, unsigned cols, const T &initial){
     _rows = rows;
     _cols = cols;
     _maxVal = initial;
+    _scaled = false;
 }
 template<typename T>
 Matrix<T>::Matrix(const Matrix<T> &other) {
@@ -35,6 +36,7 @@ Matrix<T>::Matrix(const Matrix<T> &other) {
         }
     }
 
+    _scaled = other.scaled();
 
 }
 
@@ -53,6 +55,11 @@ unsigned Matrix<T>::rows() const {
 template<typename T>
 unsigned Matrix<T>::cols() const {
     return _cols;
+}
+
+template<typename T>
+T *Matrix<T>::row(unsigned i) const {
+    return _data[i];
 }
 
 template<typename T>
@@ -112,6 +119,16 @@ void Matrix<T>::setValue(unsigned i, unsigned j, T value){
     _data[i][j] = value;
 
     if (value > _maxVal) _maxVal = value;
+}
+
+template<typename T>
+bool Matrix<T>::scaled() const{
+    return _scaled;
+}
+
+template<typename T>
+void Matrix<T>::setScaled(bool flag){
+    _scaled = flag;
 }
 
 template<typename T>
