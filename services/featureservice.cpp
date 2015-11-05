@@ -188,7 +188,7 @@ QString FeatureService::concatenateFeatureFiles(const QStringList &files){
 
 float FeatureService::euclideanDistance(float *feat1, float *feat2, unsigned featSize){
     float distance = 0;
-    for(int i = 0; i < featSize; ++i) {
+    for(unsigned i = 0; i < featSize; ++i) {
         distance += pow((feat1[i] - feat2[i]), 2.0);
     }
     return sqrt(distance);
