@@ -61,6 +61,7 @@ QString PredictiveModelService::classify(PredictiveModel *model, Matrix<float> *
             scaleProfile(profile, model->scaleValuesByFeat(), model->profileLength());
         }
         classification = classify(model, profile);
+        delete profile;
     }
     return classification;
 }

@@ -25,6 +25,12 @@ QList<SCOPEntry *> DatasetService::proteins(const Dataset &dataset) {
     return loadFilesInPathAsEntries(pathFiles);
 }
 
+QList<SCOPEntry *> DatasetService::proteinsMetadata(const Dataset &dataset){
+    QString pathFiles = dataset.pathProteins();
+
+    return loadFilesInpathAsEntriesMetadata(pathFiles);
+}
+
 QList<SCOPEntry *> DatasetService::loadFilesInPathAsEntries(QString pathToFiles){
     QStringList entFiles = scanFolderForEntFiles(pathToFiles);
 
@@ -40,6 +46,23 @@ QList<SCOPEntry *> DatasetService::loadFilesInPathAsEntries(QString pathToFiles)
     return entObjects;
 }
 
+QList<SCOPEntry *> DatasetService::loadFilesInpathAsEntriesMetadata(QString pathTofiles){
+
+    QStringList entFiles = scanFolderForEntFiles(pathTofiles);
+
+    QList<SCOPEntry *> entObjects;
+    SCOPEntryService loader;
+    unsigned int fileCounter = 0;
+
+    foreach (const QString &entPath, entFiles) {
+        entObjects << loader.loadOnlyMetaData(entPath);
+        generateProgressSignal(++fileCounter, entFiles.size());
+    }
+
+    return entObjects;
+
+}
+
 void DatasetService::generateProgressSignal(unsigned int dx, unsigned int total){
     float progressTmp = (float) dx / (float) total;
     progressTmp *= 100.0;
@@ -51,6 +74,12 @@ QList<SCOPEntry *> DatasetService::sampledProteins(const Dataset &dataset) {
     QString pathFiles = dataset.pathSampledProteins();
 
     return loadFilesInPathAsEntries(pathFiles);
+}
+
+QList<SCOPEntry *> DatasetService::sampledProteinsMetadata(const Dataset &dataset){
+    QString pathFiles = dataset.pathSampledProteins();
+
+    return loadFilesInpathAsEntriesMetadata(pathFiles);
 }
 
 void DatasetService::loadAstralFileIntoDataset(
