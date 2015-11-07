@@ -34,7 +34,7 @@ void ModelEvaluationController::loadData(){
     PredictedClassification *classification = NULL;
     DatasetService dsLoader;
 
-    QList<SCOPEntry *> entries = dsLoader.proteins(*_dataset);
+    QList<SCOPEntry *> entries = dsLoader.proteinsMetadata(*_dataset);
     foreach (SCOPEntry *entry, entries) {
         classification = new PredictedClassification();
         classification->setEntry(entry);
@@ -51,7 +51,9 @@ void ModelEvaluationController::saveModel(QString path){
 void ModelEvaluationController::evaluateClassifier(){
     PredictiveModelService evaluator;
     QString classTag = "";
-    SCOPEntry *entry = NULL;
+    SCOPEntry *entryMetadata = NULL;
+    SCOPEntry *entryFull = NULL;
+    SCOPEntryService scopLoader;
 
     if (_predictiveModel == NULL) {
         qDebug() << "The model is empty: ";
@@ -60,9 +62,11 @@ void ModelEvaluationController::evaluateClassifier(){
 
     foreach (PredictedClassification *classification,
              _classifications) {
-        entry = classification->entry();
+        entryMetadata = classification->entry();
+        entryFull = scopLoader.loadEntFile(entryMetadata->sourceFile());
         classTag = evaluator.classify(_predictiveModel,
-                                      entry);
+                                      entryFull);
+        delete entryFull;
         classification->setClassification(classTag);
     }
 

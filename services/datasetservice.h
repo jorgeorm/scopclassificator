@@ -19,12 +19,27 @@ public:
      * @return QList<SCOPEntry*>
      */
     QList<SCOPEntry*> proteins(Dataset const &dataset);
+
+    /**
+     * @brief proteinsMetadata Gets the scop entries loading only metadata
+     * @param dataset
+     * @return
+     */
+    QList<SCOPEntry *> proteinsMetadata(Dataset const &dataset);
+
     /**
      * @brief sampledProteins Gets the scop entries inside of the dataset's sample
      * @param dataset
      * @return QList<SCOPEntry*>
      */
     QList<SCOPEntry*> sampledProteins(Dataset const &dataset);
+
+    /**
+     * @brief sampledProteinsMetadata Gets the scop entries metadata inside of the dataset's sample
+     * @param dataset
+     * @return
+     */
+    QList<SCOPEntry *> sampledProteinsMetadata(Dataset const &dataset);
     
     /**
      * @brief loadAstralFileIntoDataset handles dataset seting up and file management
@@ -119,6 +134,9 @@ protected:
      * @return
      */
     QList<SCOPEntry *> loadFilesInPathAsEntries(QString pathToFiles);
+
+
+    QList<SCOPEntry *> loadFilesInpathAsEntriesMetadata(QString pathTofiles);
 
     void initializeSampleByLevel(SCOPEntryService &entLoader, const QStringList &filesInDirectory);
 
