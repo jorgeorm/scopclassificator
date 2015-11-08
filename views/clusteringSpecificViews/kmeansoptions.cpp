@@ -15,5 +15,7 @@ KMeansOptions::~KMeansOptions()
 }
 
 QString KMeansOptions::optionsAsString(){
+    QString options_str;
 
+    return options_str;
 }
