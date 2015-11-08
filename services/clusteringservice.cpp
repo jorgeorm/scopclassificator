@@ -143,6 +143,13 @@ QString ClusteringService::parseRscript(QString dataPath){
     case FeatureDefinition::Distance:
         metric = "dist";
         break;
+    case FeatureDefinition::Mixture:
+        metric = "mix";
+        break;
+    case FeatureDefinition::Undefined:
+        qDebug() << "(EE) Feature definition no definida";
+        exit(0);
+        break;
     }
 
     QString rHead = "#! /usr/bin/Rscript --vanilla";

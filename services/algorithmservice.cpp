@@ -11,6 +11,12 @@ AlgorithmService::AlgorithmService(){
     _algorithms.insert("CLARA", "clust <- clara (x, k=");
     _postAlgorithms.insert("CLARA", "clust.matrix <- clust$medoids;");
 
+
+    QString kmeans_checkInstallNload = clara_checkInstallNLoad;
+    _preAlgorithms.insert("K-MEANS", kmeans_checkInstallNload);
+    _algorithms.insert("K-MEANS", "clust <- kmeans(x, k=");
+    _postAlgorithms.insert("K-MEANS", "clust.matrix <- clust$centers;");
+
 }
 
 QString AlgorithmService::algorithm(QString algName){

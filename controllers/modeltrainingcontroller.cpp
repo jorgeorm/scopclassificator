@@ -139,7 +139,7 @@ void ModelTrainingController::runLocalCommonSearchs()
     SCOPEntry *entry;
 
     while (_threadCount < _maxThreads &&
-         _startedEntries < _entries.size ()){
+         _startedEntries < (unsigned)_entries.size ()){
 
         entry = _entries.at (_startedEntries);
 

@@ -198,6 +198,7 @@ Matrix<float> *FeatureService::calculateLocalFeatures(FeatureDefinition *feature
 
     Matrix<float> *rawMetrics;
     Matrix<float> *featureMatrix;
+    Matrix<float> *filteredFeatMatrix;
 
     rawMetrics = rawMetricsMatrix(featureConfig, entry);
 
@@ -211,6 +212,11 @@ Matrix<float> *FeatureService::calculateLocalFeatures(FeatureDefinition *feature
     unsigned idFeat = 0;
     unsigned idElement = 0;
 
+    bool containsRelevantData = false;
+    float* tmpFeature = NULL;
+    float tmpValue;
+    tmpFeature = new float[computedFeatureSize];
+
     featureMatrix = new Matrix<float> (i_numFeats, computedFeatureSize);
 
     for(unsigned initRow = 0; initRow < i_numFeatsxRow; ++initRow){
@@ -218,19 +224,50 @@ Matrix<float> *FeatureService::calculateLocalFeatures(FeatureDefinition *feature
 
             for(unsigned idRow = 0; idRow < featureSize; idRow++){
                 for(unsigned idCol = 0; idCol < featureSize; idCol++){
+                    tmpValue = rawMetrics->valueAt(idRow+initRow, idCol+initCol);
+                    tmpFeature[idElement] = tmpValue;
 
-                    featureMatrix->setValue(idFeat, idElement,
-                            rawMetrics->operator ()(idRow+initRow, idCol+initCol));
+                    if(featureConfig->treshold() != 0 &&
+                            tmpFeature[idElement] < featureConfig->treshold()){
+                        containsRelevantData = true;
+                    }
 
                     ++idElement;
                 }
             }
 
+            //TODO: Take out the counter of idFeat and the featureMatrix assignation once the other part is defined
+            //TODO: Remove this once define if should include data without close contact info
+            if(containsRelevantData ||
+                    featureConfig->treshold() == 0){
+                for(unsigned i = 0; i < computedFeatureSize; ++i){
+                    featureMatrix->setValue(idFeat, i, tmpFeature[i]);
+                    tmpFeature[i] = 0;
+                }
+                ++idFeat;
+                containsRelevantData = false;
+
+            }
+
             idElement = 0;
-            ++idFeat;
         }
     }
 
+
+    //TODO: Remove the filter if the previous part was defined
+    if(featureConfig->treshold() != 0){
+        filteredFeatMatrix = new Matrix<float>(idFeat, computedFeatureSize);
+        for(unsigned i = 0; i < idFeat; ++i){
+            for(unsigned j = 0; j < computedFeatureSize; ++j){
+                filteredFeatMatrix->setValue(i, j, featureMatrix->valueAt(i, j));
+            }
+        }
+        delete featureMatrix;
+        featureMatrix = NULL;
+        featureMatrix = filteredFeatMatrix;
+    }
+
+    delete tmpFeature;
     delete rawMetrics;
 
     return featureMatrix;

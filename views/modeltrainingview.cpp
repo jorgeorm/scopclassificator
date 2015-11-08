@@ -3,6 +3,7 @@
 #include <QThread>
 #include <QFileDialog>
 #include <views/clusteringSpecificViews/claraoptions.h>
+#include <views/clusteringSpecificViews/kmeansoptions.h>
 
 ModelTrainingView::ModelTrainingView(QWidget *parent) :
     QGroupBox(parent),
@@ -33,6 +34,11 @@ ModelTrainingView::ModelTrainingView(QWidget *parent) :
     lay->addWidget(clara);
     _algorithmsSpecifics << clara;
     _currentOptions = clara;
+
+
+    KMeansOptions *kmeans = new KMeansOptions(this);
+    kmeans->setVisible(false);
+    _algorithmsSpecifics << kmeans;
 
     _controller.moveToThread(&_controllerThread);
     _controller.setClusteringTech("CLARA");
@@ -76,7 +82,7 @@ void ModelTrainingView::on_clustTech_qcbx_activated(int index){
         _currentOptions = _algorithmsSpecifics.at(0);
         break;
     case 1:
-        _currentOptions = NULL;
+        _currentOptions = _algorithmsSpecifics.at(1);
         break;
     case 2:
         _currentOptions = NULL;

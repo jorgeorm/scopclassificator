@@ -1,13 +1,20 @@
 ﻿#include "featureservice.h"
 #include "predictivemodelservice.h"
+#include "float.h"
 
 #include <QFile>
+#include <QString>
 
 PredictiveModelService::PredictiveModelService(){
+    _entry = NULL;
+    _model = NULL;
+    _distance = COSINE;
+    _classTag = "";
 }
 
 PredictiveModelService::~PredictiveModelService(){
 
+    if(_entry != NULL) delete _entry;
 }
 
 PredictiveModel *PredictiveModelService::generateModel(QList<SCOPEntry *> entries,
@@ -57,6 +64,10 @@ QString PredictiveModelService::classify(PredictiveModel *model, Matrix<float> *
 
     if (model != NULL && localFeatures != NULL){
         float *profile = getProfile(model->representativeFeatures(), localFeatures);
+        if(profile == NULL) {
+            qDebug() << "Empty profile!!!";
+            return classification;
+        }
         if(model->hasScaledProfile()){
             scaleProfile(profile, model->scaleValuesByFeat(), model->profileLength());
         }
@@ -67,18 +78,26 @@ QString PredictiveModelService::classify(PredictiveModel *model, Matrix<float> *
 }
 
 QString PredictiveModelService::classify(PredictiveModel *model, float *profile){
-    QString assignedClassTag = "";
-    float similarity = 0;
-    float greatestSimil = 0;
+    QString assignedClassTag;
+    float distance = 0;
+    float smallerDistance = FLT_MAX;
 
     if (model != NULL && profile != NULL){
 
         QMap<QString, float *> profiles = model->profiles();
 
         foreach (QString classTag, profiles.keys()) {
-            similarity = cosineSimilarity(profiles.value(classTag), profile, model->profileLength());
-            if(similarity > greatestSimil){
-                greatestSimil = similarity;
+            switch (_distance) {
+            case EUCLIDEAN:
+                distance = euclideanDistance(profiles.value(classTag), profile, model->profileLength());
+                break;
+            case COSINE:
+                distance = 1.0 - cosineSimilarity(profiles.value(classTag), profile, model->profileLength());
+                break;
+            }
+
+            if(distance < smallerDistance){
+                smallerDistance = distance;
                 assignedClassTag = classTag;
             }
         }
@@ -189,7 +208,7 @@ void PredictiveModelService::saveModel(PredictiveModel *model, QString file){
         ostream << "==Representative Features" << endl;
         ostream << "Features: " << model->representativeFeatures()->rows() << endl;
         ostream << "Is Scaled?: " << model->representativeFeatures()->scaled() << endl;
-        ostream << "Maximum Value: " << model->representativeFeatures()->maxVal() << endl;
+        ostream << "Maximum Value: " << model->featureDefinition()->treshold() << endl;
         ostream << "Data Matrix: " << endl;
         Matrix<float> *repFeats = model->representativeFeatures();
         for (unsigned i = 0; i < repFeats->rows(); ++i){
@@ -253,6 +272,175 @@ void PredictiveModelService::scaleProfile(float *profile, float *scaleValues, un
     for(unsigned i = 0; i < profileLength; ++i) {
         profile[i] = profile[i] / scaleValues[i];
     }
+}
+
+QString PredictiveModelService::classTag() const
+{
+    return _classTag;
+}
+
+PredictiveModel *PredictiveModelService::loadModel(QString pathModel){
+    PredictiveModel *model = NULL;
+    QFile modelFile(pathModel);
+    QString line;
+    QStringList fileSegments;
+    fileSegments << "==FeatureDefinition";
+    fileSegments << "==Representative Features";
+    fileSegments << "==Profiles";
+    int idSegment;
+
+    if(modelFile.open(QIODevice::ReadOnly)){
+        QTextStream istream(&modelFile);
+        model = new PredictiveModel();
+
+        while(! istream.atEnd()){
+            line = istream.readLine();
+            if(line.contains("==")) {
+                idSegment = fileSegments.indexOf(line);
+
+                switch(idSegment) {
+                case 0:
+                    loadFeatureDefinition(&istream, model);
+                    break;
+                case 1:
+                    loadRepresentativeFeatures(&istream, model);
+                    break;
+                case 2:
+                    loadProfiles(&istream, model);
+                    break;
+                }
+            }
+        }
+
+        modelFile.close();
+    }
+
+    return model;
+}
+
+PredictiveModel *PredictiveModelService::getModel() const
+{
+    return _model;
+}
+
+void PredictiveModelService::setModel(PredictiveModel *model)
+{
+    _model = model;
+}
+
+void PredictiveModelService::runClassification(){
+    _classTag = classify(_model,_entry);
+    emit entryClassified(_entry->sid());
+}
+
+void PredictiveModelService::loadFeatureDefinition(QTextStream *istream, PredictiveModel *model){
+    QString line;
+    QStringList splitedLine;
+
+    FeatureDefinition *fdef = NULL;
+
+    line = istream->readLine();
+    splitedLine = line.split(": ");
+
+    fdef = new FeatureDefinition();
+    QString size = splitedLine.at(1);
+    fdef->setSqrtSize(size.toInt());
+
+    line = istream->readLine();
+    splitedLine = line.split(": ");
+    QString value = splitedLine.at(1);
+    FeatureDefinition::GeneratorMethod method = (FeatureDefinition::GeneratorMethod) value.toInt();
+    fdef->setMethod(method);
+
+    model->setFeatureDefinition(fdef);
+}
+
+void PredictiveModelService::loadRepresentativeFeatures(QTextStream *istream, PredictiveModel *model){
+    QString lineFeatures = istream->readLine();
+    unsigned numFeat = lineFeatures.split(": ").at(1).toUInt();
+    QString lineScaled = istream->readLine();
+    bool scaled = (bool) lineScaled.split(": ").at(1).toInt();
+    QString linemaxVal = istream->readLine();
+    FeatureDefinition * featDef = model->featureDefinition();
+    featDef->setTreshold(linemaxVal.split(": ").at(1).toFloat());
+    istream->readLine();
+
+    unsigned featSize = model->featureDefinition()->sqrtSize();
+    featSize *= featSize;
+
+    QString featLine;
+    QStringList featValues;
+    Matrix<float> *repFeat = new Matrix<float>(numFeat, featSize);
+    for (unsigned i = 0; i < numFeat; ++i) {
+        featLine = istream->readLine();
+        featValues = featLine.split(",");
+        for (unsigned j = 0; j < featSize; ++j) {
+            repFeat->setValue(i, j, featValues.at(j).toFloat());
+        }
+    }
+
+    repFeat->setScaled(scaled);
+    model->setRepresentativeFeatures(repFeat);
+}
+
+void PredictiveModelService::loadProfiles(QTextStream *istream, PredictiveModel *model){
+    QString rmsLine = istream->readLine();
+    bool rmsScaled = (bool) rmsLine.split(": ").at(1).toInt();
+    unsigned profileSize = model->representativeFeatures()->rows();
+
+    if(rmsScaled){
+        QString scaleValsLine = istream->readLine();
+        QStringList scaleValues = scaleValsLine.split(": ").at(1).split(",");
+        float *scaleVals = new float[profileSize];
+        for(unsigned i = 0; i < profileSize; ++i){
+            scaleVals[i] = scaleValues.at(i).toFloat();
+        }
+        model->setProfileScaleFactors(scaleVals);
+    }
+
+    QString profileLine;
+    QStringList profile;
+    float *profileTmp;
+    istream->readLine(); //Read header profile
+    while(! istream->atEnd()){
+        profileLine = istream->readLine();
+        profile = profileLine.split(",");
+        profileTmp = new float[profileSize];
+        for (unsigned i = 0; i < profileSize; ++i){
+            profileTmp[i] = profile.at(i+1).toFloat();
+        }
+        model->addProfile(profile.at(0), profileTmp);
+    }
+}
+
+float PredictiveModelService::euclideanDistance(float *profile1, float *profile2, unsigned profileSize) const{
+    double squareDif = 0;
+
+    for(unsigned i = 0; i < profileSize; ++i){
+        squareDif += pow(profile1[i] - profile2[i], 2.0);
+    }
+
+    return sqrt(squareDif);
+}
+
+SCOPEntry *PredictiveModelService::getEntry() const
+{
+    return _entry;
+}
+
+void PredictiveModelService::setEntry(SCOPEntry *entry)
+{
+    _entry = entry;
+}
+
+PredictiveModelService::DISTANCETYPE PredictiveModelService::getDistance() const
+{
+    return _distance;
+}
+
+void PredictiveModelService::setDistance(const DISTANCETYPE &distance)
+{
+    _distance = distance;
 }
 
 

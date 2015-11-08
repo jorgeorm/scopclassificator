@@ -1,0 +1,14 @@
+﻿<?xml version='1.0'?>
+<ui version="4.0">
+ <class>KMeansOptions</class>
+ <widget class="QWidget" name="KMeansOptions">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>395</width>
+    <height>123</height>
+   </rect>
+  </property>
+ </widget>
+</ui>

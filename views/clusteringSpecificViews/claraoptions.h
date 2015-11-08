@@ -8,8 +8,7 @@ namespace Ui {
 class ClaraOptions;
 }
 
-class ClaraOptions : public AlgorithmOptions
-{
+class ClaraOptions : public AlgorithmOptions{
     Q_OBJECT
 
 public:

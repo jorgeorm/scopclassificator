@@ -2,11 +2,7 @@
 #define FEATUREGRAPHICSSERVICE_H
 
 #include <QString>
-#include <RInside.h>
 #include <models/utils/matrix.h>
-
-
-
 
 class FeatureGraphicsService
 {

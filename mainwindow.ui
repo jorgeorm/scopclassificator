@@ -182,8 +182,26 @@
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="modelMenu">
+    <property name="title">
+     <string>Modelos</string>
+    </property>
+    <addaction name="actionLoadModel"/>
+   </widget>
+   <addaction name="modelMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionLoadModel">
+   <property name="text">
+    <string>Cargar Modelo</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Permite cargar modelos previamente entrenados&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+C</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
