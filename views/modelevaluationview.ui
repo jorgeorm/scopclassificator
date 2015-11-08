@@ -24,6 +24,23 @@
        <item>
         <layout class="QHBoxLayout" name="distance_qhbl">
          <item>
+          <widget class="QLabel" name="simultClass_qlb">
+           <property name="text">
+            <string>Classificacoines Simult.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="simultClass_qsb">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="value">
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="distance_lbl">
            <property name="text">
             <string>Distancia</string>

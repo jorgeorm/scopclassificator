@@ -96,19 +96,6 @@ const T &Matrix<T>::operator()(const unsigned &row, const unsigned &col) const{
 }
 
 template<typename T>
-Rcpp::NumericMatrix Matrix<T>::toRcppMatrix()
-{
-    Rcpp::NumericMatrix M(_rows,_cols);
-
-    for (unsigned i=0; i < _rows; i++) {
-        for (unsigned j=0; j < _cols; j++) {
-            M(i,j) = _data[i][j];
-        }
-    }
-    return(M);
-}
-
-template<typename T>
 T Matrix<T>::maxVal() const
 {
     return _maxVal;

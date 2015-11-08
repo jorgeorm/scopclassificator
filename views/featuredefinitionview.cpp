@@ -42,12 +42,8 @@ FeatureDefinitionView::FeatureDefinitionView(QWidget *parent) :
     _controller(),
     _threadController() {
 
-    _RInstance = NULL;
-
     ui->setupUi(this);
     this->setVisible(false);
-
-    ui->showFeat_qpb->setEnabled(false);
 
     _featureDef = new FeatureDefinition;
     syncFeatureDefinition();
@@ -107,17 +103,6 @@ FeatureDefinition *FeatureDefinitionView::featuresDefinition() const
 void FeatureDefinitionView::setFeaturesDefinition(FeatureDefinition *featureDef)
 {
     _featureDef = featureDef;
-}
-
-void FeatureDefinitionView::setRInstance( RInside *RInstance)
-{
-    _RInstance = RInstance;
-
-    if(_RInstance != NULL){
-        ui->showFeat_qpb->setEnabled(true);
-    } else {
-        ui->showFeat_qpb->setEnabled(false);
-    }
 }
 
 void FeatureDefinitionView::on_featureSize_qsb_valueChanged(int newVal)

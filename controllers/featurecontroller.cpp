@@ -9,7 +9,6 @@
 #include <QFile>
 
 FeatureController::FeatureController(QObject *parent) : QObject(parent){
-    _Rinstance = NULL;
     _graphicSampleSize = 20;
     _datasetTobeProcessed = NULL;
 
@@ -108,46 +107,33 @@ void FeatureController::generateFeatureGraphic(){
 }
 
 
-void FeatureController::emitProgress(int counter, int total)
-{
+void FeatureController::emitProgress(int counter, int total){
     double percentage = (double)counter / (double)total;
     percentage *= 100.0;
 
     emit notifyProgress((int) floor(percentage));
 }
 
-QString FeatureController::svgFile() const
-{
+QString FeatureController::svgFile() const{
     return _svgFile;
 }
 
-void FeatureController::setDataset(const Dataset *datasetTobeProcessed)
-{
+void FeatureController::setDataset(const Dataset *datasetTobeProcessed){
     _datasetTobeProcessed = datasetTobeProcessed;
 }
 
-unsigned int FeatureController::graphicSampleSize() const
-{
+unsigned int FeatureController::graphicSampleSize() const{
     return _graphicSampleSize;
 }
 
-void FeatureController::setGraphicSampleSize(unsigned int graphicSampleSize)
-{
+void FeatureController::setGraphicSampleSize(unsigned int graphicSampleSize){
     _graphicSampleSize = graphicSampleSize;
 }
 
-FeatureDefinition *FeatureController::featureDefinition() const
-{
+FeatureDefinition *FeatureController::featureDefinition() const{
     return _featureDefinition;
 }
 
-void FeatureController::setFeatureDefinition(FeatureDefinition *featureDefinition)
-{
+void FeatureController::setFeatureDefinition(FeatureDefinition *featureDefinition){
     _featureDefinition = featureDefinition;
 }
-
-
-void FeatureController::setRinstance(RInside *Rinstance){
-    _Rinstance = Rinstance;
-}
-

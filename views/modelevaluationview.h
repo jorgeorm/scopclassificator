@@ -7,6 +7,7 @@
 #include <models/predictivemodel.h>
 
 #include <controllers/modelevaluationcontroller.h>
+#include <QThread>
 
 namespace Ui {
 class ModelEvaluationView;
@@ -36,9 +37,20 @@ private slots:
 
     void onTestDataLoaded();
 
+    void onProgressNotified(int progress);
+
+    void onModelEvaluated();
+
+    void on_pathEntities_qtb_clicked();
+
+    void on_simultClass_qsb_valueChanged(int arg1);
+
+    void on_distance_cbx_currentIndexChanged(int index);
+
 private:
     Ui::ModelEvaluationView *ui;
     ModelEvaluationController _controller;
+    QThread _threadController;
 };
 
 #endif // MODELEVALUATIONVIEW_H

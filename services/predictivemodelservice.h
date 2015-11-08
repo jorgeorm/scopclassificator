@@ -1,15 +1,17 @@
 ﻿#ifndef PREDICTIVEMODELSERVICE_H
 #define PREDICTIVEMODELSERVICE_H
 
+#include <QObject>
 #include <models/featuredefinition.h>
 #include <models/predictivemodel.h>
 #include <models/scopentry.h>
 
+class PredictiveModelService : public QObject{
+    Q_OBJECT
 
-
-class PredictiveModelService
-{
 public:
+    enum DISTANCETYPE {EUCLIDEAN, COSINE};
+
     PredictiveModelService();
     virtual ~PredictiveModelService();
 
@@ -34,11 +36,38 @@ public:
 
     void saveModel(PredictiveModel *model = NULL, QString file = "");
 
+    DISTANCETYPE getDistance() const;
+    void setDistance(const DISTANCETYPE &distance);
+
+    SCOPEntry *getEntry() const;
+    void setEntry(SCOPEntry *entry);
+
+    PredictiveModel *getModel() const;
+    void setModel(PredictiveModel *model);
+
+    QString classTag() const;
+
+
+signals:
+    void entryClassified(QString entryName);
+
+private slots:
+    void runClassification();
+
 protected:
+    float euclideanDistance(float *profile1,
+                    float *profile2,
+                    unsigned profileSize) const;
+
     float cosineSimilarity(float *profile1,
                            float *profile2,
                            unsigned profileSize) const;
     void scaleProfile(float *profile, float *scaleValues, unsigned profileLength);
+
+    DISTANCETYPE _distance;
+    SCOPEntry *_entry;
+    PredictiveModel *_model;
+    QString _classTag;
 
 };
 

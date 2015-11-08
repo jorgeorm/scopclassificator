@@ -14,8 +14,6 @@
 #include <views/modelevaluationview.h>
 #include <views/modeltrainingview.h>
 
-#include <RInside.h>
-
 namespace Ui {
 class MainWindow;
 }
@@ -26,7 +24,7 @@ class MainWindow : public QMainWindow
 
 public:
 //    explicit MainWindow(QWidget *parent = 0);
-    explicit MainWindow(RInside &R, QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow(); 
 
 public slots:
@@ -80,7 +78,6 @@ private:
     bool _fadeDirection;
 
     // Datas
-    RInside & _R;
     Dataset *_obtainedDataset;
     FeatureDefinition *_obtainedFeaturesConf;
     PredictiveModel *_obtainedClassificationModel;

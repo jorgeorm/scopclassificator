@@ -3,7 +3,6 @@
 
 #include <QFile>
 #include <QObject>
-#include <RInside.h>
 #include <models/dataset.h>
 #include <models/utils/matrix.h>
 #include "models/featuredefinition.h"
@@ -13,8 +12,6 @@ class FeatureController : public QObject
     Q_OBJECT
 public:
     explicit FeatureController(QObject *parent = 0);    
-
-    void setRinstance(RInside *Rinstance);
 
     FeatureDefinition *featureDefinition() const;
     void setFeatureDefinition(FeatureDefinition *featureDefinition);
@@ -45,7 +42,6 @@ private:
      */
     void emitProgress(int counter, int total);
 
-    RInside * _Rinstance;
     const Dataset * _datasetTobeProcessed;
     FeatureDefinition *_featureDefinition;
     unsigned int _graphicSampleSize;

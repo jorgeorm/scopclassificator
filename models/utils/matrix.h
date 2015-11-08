@@ -2,7 +2,6 @@
 #define SCMATRIX_H
 #include <QDebug>
 #include <vector>
-#include "Rcpp.h"
 
 template <typename T>
 class Matrix {
@@ -28,13 +27,6 @@ public:
 
     // Access the individual elements (const)
     const T& operator()(const unsigned& row, const unsigned& col) const;
-
-    /**
-     * @brief toRcppMatrix
-     * @return
-     */
-    Rcpp::NumericMatrix toRcppMatrix();
-
 
     /**
      * @brief maxVal

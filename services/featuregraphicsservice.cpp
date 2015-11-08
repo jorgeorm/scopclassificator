@@ -1,7 +1,6 @@
 ﻿#include "featuregraphicsservice.h"
 #include <QFile>
 #include <QStringBuilder>
-#include <Rcpp.h>
 
 FeatureGraphicsService::FeatureGraphicsService() {
 

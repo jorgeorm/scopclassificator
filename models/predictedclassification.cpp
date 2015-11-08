@@ -26,10 +26,8 @@ void PredictedClassification::setClassification(const QString &classification){
         _assertion = true;
     _classification = classification;
 
-    qDebug() << "Protein: " <<
-                _entry->sid() <<", ClassTag: " <<
-                _classification <<
-                ", SCOPClass: " <<
-                _entry->scss();
+//    qDebug() << _entry->sid() <<", " <<
+//                _classification << ", " <<
+//                _entry->scss();
 }
 

@@ -1,13 +1,20 @@
 ﻿#include "featureservice.h"
 #include "predictivemodelservice.h"
+#include "float.h"
 
 #include <QFile>
+#include <QString>
 
 PredictiveModelService::PredictiveModelService(){
+    _entry = NULL;
+    _model = NULL;
+    _distance = COSINE;
+    _classTag = "";
 }
 
 PredictiveModelService::~PredictiveModelService(){
 
+    if(_entry != NULL) delete _entry;
 }
 
 PredictiveModel *PredictiveModelService::generateModel(QList<SCOPEntry *> entries,
@@ -68,17 +75,25 @@ QString PredictiveModelService::classify(PredictiveModel *model, Matrix<float> *
 
 QString PredictiveModelService::classify(PredictiveModel *model, float *profile){
     QString assignedClassTag = "";
-    float similarity = 0;
-    float greatestSimil = 0;
+    float distance = 0;
+    float smallerDistance = FLT_MAX;
 
     if (model != NULL && profile != NULL){
 
         QMap<QString, float *> profiles = model->profiles();
 
         foreach (QString classTag, profiles.keys()) {
-            similarity = cosineSimilarity(profiles.value(classTag), profile, model->profileLength());
-            if(similarity > greatestSimil){
-                greatestSimil = similarity;
+            switch (_distance) {
+            case EUCLIDEAN:
+                distance = euclideanDistance(profiles.value(classTag), profile, model->profileLength());
+                break;
+            case COSINE:
+                distance = 1.0 - cosineSimilarity(profiles.value(classTag), profile, model->profileLength());
+                break;
+            }
+
+            if(distance < smallerDistance){
+                smallerDistance = distance;
                 assignedClassTag = classTag;
             }
         }
@@ -253,6 +268,56 @@ void PredictiveModelService::scaleProfile(float *profile, float *scaleValues, un
     for(unsigned i = 0; i < profileLength; ++i) {
         profile[i] = profile[i] / scaleValues[i];
     }
+}
+
+QString PredictiveModelService::classTag() const
+{
+    return _classTag;
+}
+
+PredictiveModel *PredictiveModelService::getModel() const
+{
+    return _model;
+}
+
+void PredictiveModelService::setModel(PredictiveModel *model)
+{
+    _model = model;
+}
+
+void PredictiveModelService::runClassification(){
+    _classTag = classify(_model,_entry);
+    emit entryClassified(_entry->sid());
+}
+
+float PredictiveModelService::euclideanDistance(float *profile1, float *profile2, unsigned profileSize) const{
+    double squareDif = 0;
+
+    for(unsigned i = 0; i < profileSize; ++i){
+        squareDif += pow(profile1[i] - profile2[i], 2.0);
+    }
+
+    return sqrt(squareDif);
+}
+
+SCOPEntry *PredictiveModelService::getEntry() const
+{
+    return _entry;
+}
+
+void PredictiveModelService::setEntry(SCOPEntry *entry)
+{
+    _entry = entry;
+}
+
+PredictiveModelService::DISTANCETYPE PredictiveModelService::getDistance() const
+{
+    return _distance;
+}
+
+void PredictiveModelService::setDistance(const DISTANCETYPE &distance)
+{
+    _distance = distance;
 }
 
 

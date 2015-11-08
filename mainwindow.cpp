@@ -74,14 +74,10 @@ void MainWindow::hideViews(){
 //    initParams();
 //}
 
-MainWindow::MainWindow(RInside & R, QWidget *parent):
-    QMainWindow(parent), ui(new Ui::MainWindow), _R(R) {
+MainWindow::MainWindow(QWidget *parent):
+    QMainWindow(parent), ui(new Ui::MainWindow){
 
     initParams();
-
-    if (_R.instancePtr() != NULL) _featureView->setRInstance(
-                _R.instancePtr());
-
 
 }
 

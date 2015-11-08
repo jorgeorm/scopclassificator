@@ -5,8 +5,6 @@
 #include <QSvgWidget>
 #include <QThread>
 
-
-#include <RInside.h>
 #include <models/dataset.h>
 #include <models/featuredefinition.h>
 
@@ -23,8 +21,6 @@ class FeatureDefinitionView : public QGroupBox
 public:
     explicit FeatureDefinitionView(QWidget *parent = 0);
     ~FeatureDefinitionView();
-
-    void setRInstance( RInside *RInstance);
 
     FeatureDefinition *featuresDefinition() const;
     void setFeaturesDefinition(FeatureDefinition *features);
@@ -51,7 +47,6 @@ private slots:
 
 private:
     Ui::FeatureDefinitionView *ui;
-    const RInside * _RInstance;
     const Dataset * _dataset;
     FeatureDefinition * _featureDef;
     FeatureController _controller;
