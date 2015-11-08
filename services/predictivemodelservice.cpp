@@ -64,6 +64,10 @@ QString PredictiveModelService::classify(PredictiveModel *model, Matrix<float> *
 
     if (model != NULL && localFeatures != NULL){
         float *profile = getProfile(model->representativeFeatures(), localFeatures);
+        if(profile == NULL) {
+            qDebug() << "Empty profile!!!";
+            return classification;
+        }
         if(model->hasScaledProfile()){
             scaleProfile(profile, model->scaleValuesByFeat(), model->profileLength());
         }
@@ -74,7 +78,7 @@ QString PredictiveModelService::classify(PredictiveModel *model, Matrix<float> *
 }
 
 QString PredictiveModelService::classify(PredictiveModel *model, float *profile){
-    QString assignedClassTag = "";
+    QString assignedClassTag;
     float distance = 0;
     float smallerDistance = FLT_MAX;
 
@@ -204,7 +208,7 @@ void PredictiveModelService::saveModel(PredictiveModel *model, QString file){
         ostream << "==Representative Features" << endl;
         ostream << "Features: " << model->representativeFeatures()->rows() << endl;
         ostream << "Is Scaled?: " << model->representativeFeatures()->scaled() << endl;
-        ostream << "Maximum Value: " << model->representativeFeatures()->maxVal() << endl;
+        ostream << "Maximum Value: " << model->featureDefinition()->treshold() << endl;
         ostream << "Data Matrix: " << endl;
         Matrix<float> *repFeats = model->representativeFeatures();
         for (unsigned i = 0; i < repFeats->rows(); ++i){
@@ -357,8 +361,9 @@ void PredictiveModelService::loadRepresentativeFeatures(QTextStream *istream, Pr
     QString lineScaled = istream->readLine();
     bool scaled = (bool) lineScaled.split(": ").at(1).toInt();
     QString linemaxVal = istream->readLine();
-    float maxVal = linemaxVal.split(": ").at(1).toFloat();
-    QString headMatrixLine = istream->readLine();
+    FeatureDefinition * featDef = model->featureDefinition();
+    featDef->setTreshold(linemaxVal.split(": ").at(1).toFloat());
+    istream->readLine();
 
     unsigned featSize = model->featureDefinition()->sqrtSize();
     featSize *= featSize;

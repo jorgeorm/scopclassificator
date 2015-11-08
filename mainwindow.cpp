@@ -331,6 +331,9 @@ void MainWindow::on_actionLoadModel_triggered(){
     _obtainedClassificationModel = loader.loadModel(pathModel);
     qDebug() << "Model data => profileLength " << _obtainedClassificationModel->profileLength();
 
+    if (_obtainedDataset == NULL)
+        _obtainedDataset = new Dataset();
+
     // Enables next step
     ui->clb_selectDataset->setChecked(false);
     ui->clb_defineCharact->setChecked(false);

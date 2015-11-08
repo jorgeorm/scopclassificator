@@ -27,6 +27,8 @@ ModelEvaluationView::ModelEvaluationView(QWidget *parent) :
 
 ModelEvaluationView::~ModelEvaluationView(){
     delete ui;
+    _threadController.quit();
+    _threadController.wait();
 }
 
 Dataset *ModelEvaluationView::dataset() const
@@ -58,6 +60,8 @@ void ModelEvaluationView::on_loadEntities_qpb_clicked(){
 }
 
 void ModelEvaluationView::on_evaluate_qpb_clicked(){
+    _threadController.quit();
+    _threadController.wait();
     connect(&_threadController, SIGNAL(started()),
             &_controller, SLOT(evaluateClassifier()));
 

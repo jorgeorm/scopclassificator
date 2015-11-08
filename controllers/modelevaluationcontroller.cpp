@@ -110,7 +110,7 @@ void ModelEvaluationController::runClassifications()
     SCOPEntryService scopLoader;
 
     while(_threadCount < _maxClassifierThreads &&
-          _classificationsStarted < _classifications.size()){
+          _classificationsStarted < (unsigned)_classifications.size()){
         entryMetadata = _classifications.values().at(_classificationsStarted)->entry();
 
         classifier_thread = new QThread();
@@ -190,7 +190,7 @@ void ModelEvaluationController::onEntryClassified(QString entryName){
 
     notifyProgress(_classificationsCompleted, _classifications.size());
 
-    if(_classificationsCompleted == _classifications.size())
+    if(_classificationsCompleted == (unsigned)_classifications.size())
         emit classifierEvaluated();
 }
 
