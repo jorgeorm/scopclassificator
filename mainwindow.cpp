@@ -7,6 +7,7 @@
 #include <QPropertyAnimation> /*Type of animations*/
 #include <views/datasetview.h>
 #include <QMessageBox>
+#include <QFileDialog>
 
 void MainWindow::initParams()
 {
@@ -288,11 +289,10 @@ void MainWindow::on_clb_trainModel_clicked(){
 
 void MainWindow::on_clb_testModel_clicked(){
     if (_modelEvaluationView->isVisible()) return;
-    if (_obtainedDataset == NULL ||
-            _obtainedClassificationModel == NULL){
+    if (_obtainedClassificationModel == NULL){
 
         int ret = QMessageBox::warning(this, tr("Ooops!"),
-                                       tr("Se requiere haber configurado un dataset y un modelo cargado.\n"
+                                       tr("Se requiere haber cargado un modelo.\n"
                                           "Desea continuar?"),
                                        QMessageBox::Ok
                                        | QMessageBox::Cancel,
@@ -308,14 +308,33 @@ void MainWindow::on_clb_testModel_clicked(){
         _modelEvaluationView->setDataset(_obtainedDataset);
     if (_obtainedClassificationModel != NULL)
         _modelEvaluationView->setPredictiveModel(_obtainedClassificationModel);
-
     hideViews();
+
+    if (ui->sidebarWidget->width() != ui->sidebarWidget->minimumWidth())
+        resizeSidebar (ui->sidebarWidget->minimumWidth());
+    else fadeInVariableWidget();
     _modelEvaluationView->setVisible(true);
     ui->variableWidget->setEnabled(true);
-
 }
 
 void MainWindow::onNotification(QString notification){
     statusBar()->showMessage(notification, 3000);
 }
 
+
+void MainWindow::on_actionLoadModel_triggered(){
+    PredictiveModelService loader;
+    QString pathModel = QFileDialog::getOpenFileName(this,
+                                                     "Seleccione modelo previamente entrenado",
+                                                     QDir::homePath(),
+                                                     "SCOP Model(*.scopmodel)");
+    _obtainedClassificationModel = loader.loadModel(pathModel);
+    qDebug() << "Model data => profileLength " << _obtainedClassificationModel->profileLength();
+
+    // Enables next step
+    ui->clb_selectDataset->setChecked(false);
+    ui->clb_defineCharact->setChecked(false);
+    ui->clb_trainModel->setChecked(false);
+    ui->clb_testModel->setEnabled(true);
+    ui->clb_testModel->setChecked(true);
+}

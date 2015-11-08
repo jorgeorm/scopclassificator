@@ -71,6 +71,8 @@ private slots:
 
     void onNotification(QString notification);
 
+    void on_actionLoadModel_triggered();
+    
 private:
     // UI attributes
     Ui::MainWindow *ui;

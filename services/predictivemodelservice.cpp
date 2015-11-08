@@ -275,6 +275,45 @@ QString PredictiveModelService::classTag() const
     return _classTag;
 }
 
+PredictiveModel *PredictiveModelService::loadModel(QString pathModel){
+    PredictiveModel *model = NULL;
+    QFile modelFile(pathModel);
+    QString line;
+    QStringList fileSegments;
+    fileSegments << "==FeatureDefinition";
+    fileSegments << "==Representative Features";
+    fileSegments << "==Profiles";
+    int idSegment;
+
+    if(modelFile.open(QIODevice::ReadOnly)){
+        QTextStream istream(&modelFile);
+        model = new PredictiveModel();
+
+        while(! istream.atEnd()){
+            line = istream.readLine();
+            if(line.contains("==")) {
+                idSegment = fileSegments.indexOf(line);
+
+                switch(idSegment) {
+                case 0:
+                    loadFeatureDefinition(&istream, model);
+                    break;
+                case 1:
+                    loadRepresentativeFeatures(&istream, model);
+                    break;
+                case 2:
+                    loadProfiles(&istream, model);
+                    break;
+                }
+            }
+        }
+
+        modelFile.close();
+    }
+
+    return model;
+}
+
 PredictiveModel *PredictiveModelService::getModel() const
 {
     return _model;
@@ -288,6 +327,85 @@ void PredictiveModelService::setModel(PredictiveModel *model)
 void PredictiveModelService::runClassification(){
     _classTag = classify(_model,_entry);
     emit entryClassified(_entry->sid());
+}
+
+void PredictiveModelService::loadFeatureDefinition(QTextStream *istream, PredictiveModel *model){
+    QString line;
+    QStringList splitedLine;
+
+    FeatureDefinition *fdef = NULL;
+
+    line = istream->readLine();
+    splitedLine = line.split(": ");
+
+    fdef = new FeatureDefinition();
+    QString size = splitedLine.at(1);
+    fdef->setSqrtSize(size.toInt());
+
+    line = istream->readLine();
+    splitedLine = line.split(": ");
+    QString value = splitedLine.at(1);
+    FeatureDefinition::GeneratorMethod method = (FeatureDefinition::GeneratorMethod) value.toInt();
+    fdef->setMethod(method);
+
+    model->setFeatureDefinition(fdef);
+}
+
+void PredictiveModelService::loadRepresentativeFeatures(QTextStream *istream, PredictiveModel *model){
+    QString lineFeatures = istream->readLine();
+    unsigned numFeat = lineFeatures.split(": ").at(1).toUInt();
+    QString lineScaled = istream->readLine();
+    bool scaled = (bool) lineScaled.split(": ").at(1).toInt();
+    QString linemaxVal = istream->readLine();
+    float maxVal = linemaxVal.split(": ").at(1).toFloat();
+    QString headMatrixLine = istream->readLine();
+
+    unsigned featSize = model->featureDefinition()->sqrtSize();
+    featSize *= featSize;
+
+    QString featLine;
+    QStringList featValues;
+    Matrix<float> *repFeat = new Matrix<float>(numFeat, featSize);
+    for (unsigned i = 0; i < numFeat; ++i) {
+        featLine = istream->readLine();
+        featValues = featLine.split(",");
+        for (unsigned j = 0; j < featSize; ++j) {
+            repFeat->setValue(i, j, featValues.at(j).toFloat());
+        }
+    }
+
+    repFeat->setScaled(scaled);
+    model->setRepresentativeFeatures(repFeat);
+}
+
+void PredictiveModelService::loadProfiles(QTextStream *istream, PredictiveModel *model){
+    QString rmsLine = istream->readLine();
+    bool rmsScaled = (bool) rmsLine.split(": ").at(1).toInt();
+    unsigned profileSize = model->representativeFeatures()->rows();
+
+    if(rmsScaled){
+        QString scaleValsLine = istream->readLine();
+        QStringList scaleValues = scaleValsLine.split(": ").at(1).split(",");
+        float *scaleVals = new float[profileSize];
+        for(unsigned i = 0; i < profileSize; ++i){
+            scaleVals[i] = scaleValues.at(i).toFloat();
+        }
+        model->setProfileScaleFactors(scaleVals);
+    }
+
+    QString profileLine;
+    QStringList profile;
+    float *profileTmp;
+    istream->readLine(); //Read header profile
+    while(! istream->atEnd()){
+        profileLine = istream->readLine();
+        profile = profileLine.split(",");
+        profileTmp = new float[profileSize];
+        for (unsigned i = 0; i < profileSize; ++i){
+            profileTmp[i] = profile.at(i+1).toFloat();
+        }
+        model->addProfile(profile.at(0), profileTmp);
+    }
 }
 
 float PredictiveModelService::euclideanDistance(float *profile1, float *profile2, unsigned profileSize) const{

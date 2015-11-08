@@ -61,6 +61,7 @@ void ModelEvaluationView::on_evaluate_qpb_clicked(){
     connect(&_threadController, SIGNAL(started()),
             &_controller, SLOT(evaluateClassifier()));
 
+    ui->progress_qpb->setValue(0);
     ui->evaluate_qpb->setEnabled(false);
     ui->save_qpb->setEnabled(false);
     ui->loadEntities_qpb->setEnabled(false);

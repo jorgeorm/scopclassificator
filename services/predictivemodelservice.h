@@ -47,6 +47,7 @@ public:
 
     QString classTag() const;
 
+    PredictiveModel *loadModel(QString pathModel);
 
 signals:
     void entryClassified(QString entryName);
@@ -55,6 +56,12 @@ private slots:
     void runClassification();
 
 protected:
+    void loadFeatureDefinition(QTextStream *istream, PredictiveModel *model);
+
+    void loadRepresentativeFeatures(QTextStream *istream, PredictiveModel *model);
+
+    void loadProfiles(QTextStream *istream, PredictiveModel *model);
+
     float euclideanDistance(float *profile1,
                     float *profile2,
                     unsigned profileSize) const;

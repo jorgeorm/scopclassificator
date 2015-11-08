@@ -308,7 +308,7 @@ QMap<QString, QString> DatasetService::getParamSampleFromFileList(
                             pathSelectedFile);
 
         if(! _runSampleByScopLevel) {
-            continueVal = sampledFiles.values().size() < sampleSize;
+            continueVal = sampledFiles.values().size() < (int) sampleSize;
         }
 
         generateProgressSignal(sampledFiles.size(), expectedSampSize);
