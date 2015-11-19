@@ -365,10 +365,10 @@ QStringList DatasetService::filteredAstralFiles(
     QStringList unexistingFiles, astralFiles;
 
     // Remove afterwards
-//    SCOPEntry *se;
-//    SCOPEntryService loader;
-//    QStringList approvedClasses;
-//    approvedClasses<< "a" << "b" << "c" << "d" << "e";
+    SCOPEntry *se;
+    SCOPEntryService loader;
+    QStringList approvedClasses;
+    approvedClasses<< "a" << "b" << "c" << "d";
     if (idFile.open(QIODevice::ReadOnly)) {
 
         QTextStream in(&idFile);
@@ -391,10 +391,10 @@ QStringList DatasetService::filteredAstralFiles(
             // añado archivo a la lista
 
             if (entFilesMap.contains(id)){
-//                se = loader.loadEntFile(entFilesMap.value(id));
-//                QString classTag = se->scss(SCOPEntry::CLASS);
-//                delete se;
-//                if(approvedClasses.contains(classTag)) astralFiles << entFilesMap.value(id);
+                se = loader.loadEntFile(entFilesMap.value(id));
+                QString classTag = se->scss(SCOPEntry::CLASS);
+                delete se;
+                if(approvedClasses.contains(classTag)) astralFiles << entFilesMap.value(id);
                 astralFiles << entFilesMap.value(id);
             }else {
                 unexistingFiles << id+".ent";

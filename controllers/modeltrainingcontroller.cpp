@@ -234,7 +234,9 @@ void ModelTrainingController::obtainModel(){
     _globalCommonFeatures = featureLoader.loadCalculatedMatrix(_pathGlobalFeatures);
     _globalCommonFeatures->setScaled(true);
     _model = modelGenerator.generateModel(_entries, _globalCommonFeatures, _featureDef);
-    modelGenerator.scaleProfiles(_model);
+    float *scales = NULL;
+//            modelGenerator.getMagnitudeScale(_model);
+    modelGenerator.scaleProfiles(_model, scales);
 }
 
 void ModelTrainingController::onCommonFeaturesFound(QString entryName){

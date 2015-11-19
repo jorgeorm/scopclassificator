@@ -49,6 +49,10 @@ public:
 
     PredictiveModel *loadModel(QString pathModel);
 
+    float *getRMSScale(PredictiveModel *model = NULL)const;
+
+    float *getMagnitudeScale(PredictiveModel *model = NULL)const;
+
 signals:
     void entryClassified(QString entryName);
 
