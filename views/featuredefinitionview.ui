@@ -229,6 +229,11 @@
              <string extracomment="Genera matriz de angulos para la obtención de las características locales.">Angulos</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>Mixta</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item row="1" column="0">
