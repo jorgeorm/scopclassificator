@@ -279,39 +279,39 @@ Matrix<float> *FeatureService::rawMetricsMatrix(
 
     Matrix<float> *rawMetrics = NULL;
 
-    if(featureConfig->method() == FeatureDefinition::Mixture){
-        qDebug() << " -- Gonna Calculate a mixted matrix";
-        Matrix<float> *distances, *angles, *normalizedAngles, *normalizedDistances;
+//    if(featureConfig->method() == FeatureDefinition::Mixture){
+//        qDebug() << " -- Gonna Calculate a mixted matrix";
+//        Matrix<float> *distances, *angles, *normalizedAngles, *normalizedDistances;
 
-        if (featureConfig->treshold() != 0) {
-            distances = calculateMetricsMatrix(
-                    FeatureDefinition::Distance,
-                    entry,
-                    featureConfig->treshold());
-        }
-        else {
-            distances = calculateMetricsMatrix(
-                    FeatureDefinition::Distance,
-                    entry);
-        }
+//        if (featureConfig->treshold() != 0) {
+//            distances = calculateMetricsMatrix(
+//                    FeatureDefinition::Distance,
+//                    entry,
+//                    featureConfig->treshold());
+//        }
+//        else {
+//            distances = calculateMetricsMatrix(
+//                    FeatureDefinition::Distance,
+//                    entry);
+//        }
 
-        angles = calculateMetricsMatrix(
-                    FeatureDefinition::Angle, entry);
+//        angles = calculateMetricsMatrix(
+//                    FeatureDefinition::Angle, entry);
 
-        normalizedAngles = this->scaleMatrixByNumber(angles);
-        normalizedDistances = this->scaleMatrixByNumber(distances);
+//        normalizedAngles = this->scaleMatrixByNumber(angles);
+//        normalizedDistances = this->scaleMatrixByNumber(distances);
 
-        rawMetrics = mixMetricMatrices(normalizedDistances,
-                                       normalizedAngles);
+//        rawMetrics = mixMetricMatrices(normalizedDistances,
+//                                       normalizedAngles);
 
-        delete distances;
-        delete angles;
-        delete normalizedAngles;
-        delete normalizedDistances;
-        distances = NULL;
-        angles = NULL;
+//        delete distances;
+//        delete angles;
+//        delete normalizedAngles;
+//        delete normalizedDistances;
+//        distances = NULL;
+//        angles = NULL;
 
-    }else {
+//    }else {
 
         if (featureConfig->treshold() != 0){
 
@@ -325,7 +325,7 @@ Matrix<float> *FeatureService::rawMetricsMatrix(
                         featureConfig->method(),
                         entry);
         }
-    }
+//    }
 
     return rawMetrics;
 }
