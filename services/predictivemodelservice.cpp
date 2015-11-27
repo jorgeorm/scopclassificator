@@ -265,8 +265,8 @@ float PredictiveModelService::cosineSimilarity(float *profile1,
 
         for(unsigned i = 0; i < profileSize; ++i){
             dotProduct += profile1[i] * profile2[i];
-            magnitude1 += pow(profile1[i], 2.0);
-            magnitude2 += pow(profile2[i], 2.0);
+            magnitude1 += profile1[i] * profile1[i];
+            magnitude2 += profile2[i] * profile2[i];
         }
 
         magnitude1 = sqrt(magnitude1);
@@ -359,6 +359,7 @@ void PredictiveModelService::setModel(PredictiveModel *model)
 
 void PredictiveModelService::runClassification(){
     _classTag = classify(_model,_entry);
+    qDebug() << "entry: " << _entry->sid() << ", class: " << _entry->scss() << ", classTag: " << _classTag;
     emit entryClassified(_entry->sid());
 }
 

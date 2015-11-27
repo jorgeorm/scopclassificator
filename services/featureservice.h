@@ -15,13 +15,16 @@ class FeatureService
 public:
     FeatureService();
 
+
     /**
-    * @brief rawMetricsMatrix Generates a matrix of distances or a matrix of angles depending on what is specified in the feature config
-    * @param featureConfig
-    * @param entry
-    * @return
-    */
-    Matrix<float> *rawMetricsMatrix(FeatureDefinition *featureConfig, SCOPEntry *entry);
+     * @brief rawMetricsMatrix Generates a matrix of distances or a matrix of angles depending on what is specified in the feature definition
+     * @param method
+     * @param entry
+     * @param treshold
+     * @return
+     */
+    Matrix<float> *rawMetricsMatrix(FeatureDefinition::GeneratorMethod method,
+                                    SCOPEntry *entry, const double treshold = 0);
 
     /**
     * @brief localFeaturesMatrix Generates a local feature Matrix using the feature configuration
@@ -83,7 +86,7 @@ protected:
     Matrix<float> *calculateMetricsMatrix(
             FeatureDefinition::GeneratorMethod method,
             SCOPEntry *entry,
-            double treshold = std::numeric_limits<double>::max());
+            const double treshold = std::numeric_limits<double>::max());
 
     /**
      * @brief calculateLocalFeatures

@@ -230,7 +230,12 @@ double Residue::operator-(const Bio::Residue &other)
 
 double Residue::operator%(const Bio::Residue &other)
 {
-    if (_mapAtoms.contains("CA") && other.mapAtoms().contains("CA")){
+    if (_mapAtoms.contains("N") &&
+        _mapAtoms.contains("CA") &&
+        _mapAtoms.contains("C") &&
+            other.mapAtoms().contains("N") &&
+            other.mapAtoms().contains("CA") &&
+            other.mapAtoms().contains("C")){
         Atom thisNormal = normalVector();
         Atom otherNormal = other.normalVector();
 
