@@ -9,7 +9,7 @@ FeatureGraphicsService::FeatureGraphicsService() {
 QString FeatureGraphicsService::generateHeatmap(
         QString protName,Matrix <float> *data){
 
-    QString svgFilePath = "/tmp/" % protName % ".png" ;
+    QString svgFilePath = "/tmp/" % protName % ".svg" ;
     QString rscriptTmp = "/tmp/heatMap_" % protName % ".R";
 
     QFile rFile(rscriptTmp);
@@ -76,7 +76,7 @@ QString FeatureGraphicsService::generateMixedHeatmap(QString protName,
                                                      Matrix<float> *dataAux){
 
 
-    QString svgFilePath = "/tmp/" % protName % ".png" ;
+    QString svgFilePath = "/tmp/" % protName % ".svg" ;
     QString rscriptTmp = "/tmp/heatMap_" % protName % ".R";
 
     QFile rFile(rscriptTmp);

@@ -251,6 +251,9 @@ QMap<QString, QString> DatasetService::getParamSampleFromFileList(
 
     emit notifyTask("Generating Sample");
     generateProgressSignal(0, 1);
+    foreach (QString classTag, _totalByScopLvl.keys()) {
+        qDebug() << "Total proteins for " << classTag << ": " << _totalByScopLvl[classTag];
+    }
     do{
         int position = rand.randomIntBetween(0, filesInDirectory.size());
         QString pathSelectedFile = filesInDirectory.at(position);
@@ -369,6 +372,7 @@ QStringList DatasetService::filteredAstralFiles(
     SCOPEntryService loader;
     QStringList approvedClasses;
     approvedClasses<< "a" << "b" << "c" << "d";
+
     if (idFile.open(QIODevice::ReadOnly)) {
 
         QTextStream in(&idFile);
@@ -391,11 +395,16 @@ QStringList DatasetService::filteredAstralFiles(
             // añado archivo a la lista
 
             if (entFilesMap.contains(id)){
+
                 se = loader.loadEntFile(entFilesMap.value(id));
                 QString classTag = se->scss(SCOPEntry::CLASS);
                 delete se;
-                if(approvedClasses.contains(classTag)) astralFiles << entFilesMap.value(id);
-                astralFiles << entFilesMap.value(id);
+
+                foreach (QString approvedClassTag, approvedClasses){
+                    if (classTag.startsWith(approvedClassTag)){
+                        astralFiles << entFilesMap.value(id);
+                    }
+                }
             }else {
                 unexistingFiles << id+".ent";
             }
