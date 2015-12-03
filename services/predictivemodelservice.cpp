@@ -81,24 +81,28 @@ QString PredictiveModelService::classify(PredictiveModel *model, float *profile)
     QString assignedClassTag;
     float distance = 0;
     float smallerDistance = FLT_MAX;
+    float *modelProfile;
 
     if (model != NULL && profile != NULL){
 
         QMap<QString, float *> profiles = model->profiles();
 
         foreach (QString classTag, profiles.keys()) {
-            switch (_distance) {
-            case EUCLIDEAN:
-                distance = euclideanDistance(profiles.value(classTag), profile, model->profileLength());
-                break;
-            case COSINE:
-                distance = 1.0 - cosineSimilarity(profiles.value(classTag), profile, model->profileLength());
-                break;
-            }
 
-            if(distance < smallerDistance){
-                smallerDistance = distance;
-                assignedClassTag = classTag;
+            foreach (modelProfile, profiles.values(classTag)){
+                switch (_distance) {
+                case EUCLIDEAN:
+                    distance = euclideanDistance(modelProfile, profile, model->profileLength());
+                    break;
+                case COSINE:
+                    distance = 1.0 - cosineSimilarity(modelProfile, profile, model->profileLength());
+                    break;
+                }
+
+                if(distance < smallerDistance){
+                    smallerDistance = distance;
+                    assignedClassTag = classTag;
+                }
             }
         }
     }
@@ -239,15 +243,20 @@ void PredictiveModelService::saveModel(PredictiveModel *model, QString file){
             ostream << endl;
         }
         ostream << "Classtag, Profile (csv)" << endl;
+        QList<float *> profilesByClass;
         foreach (QString classTag, model->profiles().keys()){
-            ostream << classTag;
-            ostream << ", ";
-            profile = model->profile(classTag);
-            for(unsigned i = 0; i < profileLength; ++i){
-                ostream << profile[i];
-                if (i < (profileLength - 1)) ostream << ",";
+            profilesByClass = model->profiles().values(classTag);
+
+            foreach(profile, profilesByClass){
+                ostream << classTag;
+                ostream << ", ";
+
+                for(unsigned i = 0; i < profileLength; ++i){
+                    ostream << profile[i];
+                    if (i < (profileLength - 1)) ostream << ",";
+                }
+                ostream << endl;
             }
-            ostream << endl;
         }
 
         outputFile.close();
