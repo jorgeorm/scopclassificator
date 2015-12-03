@@ -42,21 +42,58 @@ void FeatureController::generateFeatureGraphic(){
         proteins = dsHandler.proteins(*_datasetTobeProcessed);
     }
 
-    Matrix <float> *data;
+    Matrix <float> *data, *dataAux, *tmpMatrix;
+    tmpMatrix = NULL;
+    dataAux = NULL;
     SCOPEntry *prot;
     unsigned fileCounter;
     fileCounter = 0;
 
     QString dataTmpFile;
+    FeatureDefinition::GeneratorMethod method = _featureDefinition->method();
 
 
     foreach (prot, proteins) {
-        data = dataGenerator.rawMetricsMatrix(_featureDefinition,prot);
 
-        _svgFile = plotter.generateHeatmap(prot->sid(), data);
+
+        // Checks if I'm generating a mixed matrix
+
+        switch (method) {
+        case FeatureDefinition::Angle:
+        case FeatureDefinition::Distance:
+            data = dataGenerator.rawMetricsMatrix(method,
+                                                  prot,
+                                                  _featureDefinition->treshold());
+            _svgFile = plotter.generateHeatmap(prot->sid(), data);
+            break;
+        case FeatureDefinition::Mixture:
+            data = dataGenerator.rawMetricsMatrix(FeatureDefinition::Distance,
+                                                  prot,
+                                                  _featureDefinition->treshold());
+            tmpMatrix = dataGenerator.scaleMatrixByNumber(data, _featureDefinition->treshold());
+            delete data;
+            data = tmpMatrix;
+
+            dataAux = dataGenerator.rawMetricsMatrix(FeatureDefinition::Angle,
+                                                     prot);
+            tmpMatrix = dataGenerator.scaleMatrixByNumber(dataAux);
+            delete dataAux;
+            dataAux = tmpMatrix;
+
+            tmpMatrix = NULL;
+            _svgFile = plotter.generateMixedHeatmap(prot->sid(), data, dataAux);
+            break;
+        default:
+            qCritical() <<"This generation method is not supported by graphics";
+            return;
+            break;
+        }
+
 
         delete data;
         data = NULL;
+        if (dataAux != NULL) delete dataAux;
+        dataAux = NULL;
         emitProgress(++fileCounter,proteins.size());
     }
     qDeleteAll(proteins);

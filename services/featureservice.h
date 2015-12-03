@@ -6,40 +6,46 @@
 #include <models/utils/matrix.h>
 
 
+/**
+ * @brief The FeatureService class has the logic to generate and handle feature operations
+ */
 class FeatureService
 {
 //--------------------------------PUBLIC SECTION--------------------------------
 public:
     FeatureService();
 
-    /**
-    * @brief rawMetricsMatrix
-    * @param featureConfig
-    * @param entry
-    * @return
-    */
-    Matrix<float> *rawMetricsMatrix(FeatureDefinition *featureConfig, SCOPEntry *entry);
 
     /**
-    * @brief localFeaturesMatrix
-    * @param featureConfig
-    * @param entry
+     * @brief rawMetricsMatrix Generates a matrix of distances or a matrix of angles depending on what is specified in the feature definition
+     * @param method
+     * @param entry
+     * @param treshold
+     * @return
+     */
+    Matrix<float> *rawMetricsMatrix(FeatureDefinition::GeneratorMethod method,
+                                    SCOPEntry *entry, const double treshold = 0);
+
+    /**
+    * @brief localFeaturesMatrix Generates a local feature Matrix using the feature configuration
+    * @param featureConfig Specifies how's gonna be generated the feature
+    * @param entry SCOPEntry used to generate the feature matrix
     * @return
     */
     Matrix<float> *localFeaturesMatrix(FeatureDefinition *featureConfig, SCOPEntry *entry);
 
 
     /**
-     * @brief scaleMatrixByNumber
-     * @param matrix
-     * @param norm
-     * @return
+     * @brief scaleMatrixByNumber Generates a new Matrix which will be scaled by the value specified
+     * @param matrix matrix which is gonna be scaled
+     * @param norm scalar value
+     * @return scaled matrix
      */
     Matrix<float> *scaleMatrixByNumber(const Matrix<float> *matrix, double norm = 0);
 
 
     /**
-     * @brief saveCalculatedMatrix Stores a matrix into a specified file
+     * @brief saveCalculatedMatrix Stores a feature matrix into a specified file
      * @param matrix
      * @param fileName
      */
@@ -80,7 +86,7 @@ protected:
     Matrix<float> *calculateMetricsMatrix(
             FeatureDefinition::GeneratorMethod method,
             SCOPEntry *entry,
-            double treshold = std::numeric_limits<double>::max());
+            const double treshold = std::numeric_limits<double>::max());
 
     /**
      * @brief calculateLocalFeatures

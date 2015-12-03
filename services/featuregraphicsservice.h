@@ -16,6 +16,14 @@ public:
      * @return
      */
     QString generateHeatmap(QString protName, Matrix <float> *data);
+    /**
+     * @brief generateMixedHeatmap Generates a svg file mixing two matrices column by column and gives the route
+     * @param protName
+     * @param data
+     * @param dataAux
+     * @return
+     */
+    QString generateMixedHeatmap(QString protName, Matrix <float> *data, Matrix <float> *dataAux);
 private:
     QString filterSVGFile(QString cairoSvgFile);
 };

@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = scoclassificator_v2
+TARGET = scopclassificator
 TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \

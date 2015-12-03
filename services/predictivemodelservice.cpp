@@ -159,27 +159,36 @@ float *PredictiveModelService::getProfile(Matrix<float> *representativeFeatures,
     return profile;
 }
 
-void PredictiveModelService::scaleProfiles(PredictiveModel *model, float *scaleValues){
-    unsigned profileLength = model->representativeFeatures()->rows();
+float *PredictiveModelService::getRMSScale(PredictiveModel *model)const{
+    if (model == NULL) return NULL;
+
     unsigned numProfiles = model->profiles().size();
+    unsigned profileLength = model->profileLength();
+    float *scaleValues = new float[profileLength];
+    for (unsigned i = 0; i < profileLength; ++i) scaleValues[i] = 0;
+    float *profile;
+
+    //SUM OF SQUARES
+    foreach(QString classTag, model->profiles().keys()){
+        profile = model->profile(classTag);
+        for (unsigned i = 0; i < profileLength; ++i) scaleValues[i] += pow((double)profile[i], 2.0);
+    }
+
+    //SUM OF SQUARES SQRT(SUMSQ/(N-1))
+    for (unsigned i = 0; i < profileLength; ++i)
+        scaleValues[i] = sqrt(scaleValues[i] / (float)(numProfiles - 1));
+
+    return scaleValues;
+}
+
+void PredictiveModelService::scaleProfiles(PredictiveModel *model, float *scaleValues){
+    unsigned profileLength = model->profileLength();
 
     if (model != NULL) {
 
         //If no scale is provided, RMS is calculated and used as scale value
         if (scaleValues == NULL){
-            scaleValues = new float[profileLength];
-            for (unsigned i = 0; i < profileLength; ++i) scaleValues[i] = 0;
-            float *profile;
-
-            //SUM OF SQUARES
-            foreach(QString classTag, model->profiles().keys()){
-                profile = model->profile(classTag);
-                for (unsigned i = 0; i < profileLength; ++i) scaleValues[i] += pow((double)profile[i], 2.0);
-            }
-
-            //SUM OF SQUARES SQRT(SUMSQ/(N-1))
-            for (unsigned i = 0; i < profileLength; ++i)
-                scaleValues[i] = sqrt(scaleValues[i] / (float)(numProfiles - 1));
+            scaleValues = getRMSScale(model);
         }
 
         // Scales profiles in model
@@ -256,8 +265,8 @@ float PredictiveModelService::cosineSimilarity(float *profile1,
 
         for(unsigned i = 0; i < profileSize; ++i){
             dotProduct += profile1[i] * profile2[i];
-            magnitude1 += pow(profile1[i], 2.0);
-            magnitude2 += pow(profile2[i], 2.0);
+            magnitude1 += profile1[i] * profile1[i];
+            magnitude2 += profile2[i] * profile2[i];
         }
 
         magnitude1 = sqrt(magnitude1);
@@ -274,8 +283,7 @@ void PredictiveModelService::scaleProfile(float *profile, float *scaleValues, un
     }
 }
 
-QString PredictiveModelService::classTag() const
-{
+QString PredictiveModelService::classTag() const{
     return _classTag;
 }
 
@@ -318,6 +326,27 @@ PredictiveModel *PredictiveModelService::loadModel(QString pathModel){
     return model;
 }
 
+float *PredictiveModelService::getMagnitudeScale(PredictiveModel *model) const{
+    if (model == NULL) return NULL;
+
+    unsigned profileLength = model->profileLength();
+    float *scaleValues = new float[profileLength];
+    for (unsigned i = 0; i < profileLength; ++i) scaleValues[i] = 0;
+    float *profile;
+
+    //SUM OF SQUARES
+    foreach(QString classTag, model->profiles().keys()){
+        profile = model->profile(classTag);
+        for (unsigned i = 0; i < profileLength; ++i) scaleValues[i] += pow((double)profile[i], 2.0);
+    }
+
+    //SUM OF SQUARES SQRT(SUMSQ/(N-1))
+    for (unsigned i = 0; i < profileLength; ++i)
+        scaleValues[i] = sqrt(scaleValues[i]);
+
+    return scaleValues;
+}
+
 PredictiveModel *PredictiveModelService::getModel() const
 {
     return _model;
@@ -330,6 +359,7 @@ void PredictiveModelService::setModel(PredictiveModel *model)
 
 void PredictiveModelService::runClassification(){
     _classTag = classify(_model,_entry);
+    qDebug() << "entry: " << _entry->sid() << ", class: " << _entry->scss() << ", classTag: " << _classTag;
     emit entryClassified(_entry->sid());
 }
 

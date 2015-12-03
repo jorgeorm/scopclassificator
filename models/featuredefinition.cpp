@@ -2,7 +2,7 @@
 
 FeatureDefinition::FeatureDefinition(QObject *parent) : QObject(parent)
 {
-
+    _treshold = 0;
 }
 
 FeatureDefinition::GeneratorMethod FeatureDefinition::method() const

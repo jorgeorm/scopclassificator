@@ -29,9 +29,12 @@ FeatureDefinition::GeneratorMethod FeatureDefinitionView::selectedMethod()
 
 void FeatureDefinitionView::syncFeatureDefinition()
 {
-    _featureDef->setMethod (selectedMethod ());
+    FeatureDefinition::GeneratorMethod method = selectedMethod();
+    _featureDef->setMethod (method);
     _featureDef->setSqrtSize (ui->featureSize_qsb->value());
-    if(_featureDef->method() == FeatureDefinition::Distance)
+
+    if(method == FeatureDefinition::Distance
+            || method == FeatureDefinition::Mixture)
         _featureDef->setTreshold (ui->featLimit_qsb->value());
 
 }
@@ -139,11 +142,14 @@ void FeatureDefinitionView::setDataset(const Dataset *dataset)
 }
 
 void FeatureDefinitionView::on_featMethod_qcb_activated(const QString &arg1){
-    if (! arg1.contains("Distancia")){
-        this->ui->featLimit_qsb->setVisible(false);
-        this->ui->featLimit_qlbl->setVisible(false);
-    } else {
+
+    if (arg1.contains("Distancia") || arg1.contains("Mixta")){
         this->ui->featLimit_qlbl->setVisible(true);
         this->ui->featLimit_qsb->setVisible(true);
+    } else {
+        this->ui->featLimit_qsb->setVisible(false);
+        this->ui->featLimit_qlbl->setVisible(false);
     }
+
+
 }
