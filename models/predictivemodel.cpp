@@ -25,7 +25,7 @@ void PredictiveModel::setRepresentativeFeatures(Matrix<float > *representativeFe
 }
 
 void PredictiveModel::addProfile(QString classTag, float *profile){
-    _profiles.insert(classTag, profile);
+    _profiles.insertMulti(classTag, profile);
 }
 
 FeatureDefinition *PredictiveModel::featureDefinition() const{
