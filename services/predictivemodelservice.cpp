@@ -105,6 +105,10 @@ QString PredictiveModelService::classify(PredictiveModel *model, float *profile)
                 }
             }
         }
+
+        qDebug() << _entry->sid() << "; " << _entry->scss() << "; " << assignedClassTag;
+
+        profiles.clear();
     }
 
     return assignedClassTag;
@@ -368,7 +372,6 @@ void PredictiveModelService::setModel(PredictiveModel *model)
 
 void PredictiveModelService::runClassification(){
     _classTag = classify(_model,_entry);
-    qDebug() << "entry: " << _entry->sid() << ", class: " << _entry->scss() << ", classTag: " << _classTag;
     emit entryClassified(_entry->sid());
 }
 
