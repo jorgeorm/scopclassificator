@@ -171,9 +171,7 @@ void MainWindow::onDatasetObtained(){
 }
 
 void MainWindow::onClassificationModelObtained(){
-    qDebug() << "Just obtained the model: ";
     _obtainedClassificationModel = _modelTrainingView->model();
-    qDebug() << "Model data => profileLength " << _obtainedClassificationModel->profileLength();
 
     // Enables next step
     ui->clb_selectDataset->setChecked(false);
@@ -329,7 +327,6 @@ void MainWindow::on_actionLoadModel_triggered(){
                                                      QDir::homePath(),
                                                      "SCOP Model(*.scopmodel)");
     _obtainedClassificationModel = loader.loadModel(pathModel);
-    qDebug() << "Model data => profileLength " << _obtainedClassificationModel->profileLength();
 
     if (_obtainedDataset == NULL)
         _obtainedDataset = new Dataset();

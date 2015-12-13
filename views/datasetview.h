@@ -42,7 +42,6 @@ private:
     QString _defaultSearchPath;
     DatasetController _controller;
     Dataset * _dataset_p;
-    QList <SCOPEntry*> _models;
     SCOPEntryTableModel * _datasetVisualRep;
     QThread _threadController;
 

@@ -25,6 +25,8 @@ public:
     double treshold() const;
     void setTreshold(double treshold);
 
+    int calculatedSize() const;
+
 signals:
     void methodChanged();
     void sizeChanged();

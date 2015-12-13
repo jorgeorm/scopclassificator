@@ -40,6 +40,7 @@ QList<SCOPEntry *> DatasetService::loadFilesInPathAsEntries(QString pathToFiles)
 
     foreach (const QString &entPath, entFiles) {
         entObjects << loader.loadEntFile(entPath);
+        qDebug() << entObjects.last()->sid() <<", "<< entObjects.last()->scss() << ", " << entObjects.last()->numResidues();
         generateProgressSignal(++fileCounter, entFiles.size());
     }
 
@@ -214,10 +215,9 @@ void DatasetService::initializeSampleByLevel(SCOPEntryService &entLoader, const 
 
         if(! _sampleByScopLvl.contains(className)){
             _sampleByScopLvl.insert(className, 0);
-
             _totalByScopLvl.insert(className, 1);
-        } else{
 
+        } else{
             elements = _totalByScopLvl[className];
             _totalByScopLvl.insert(className, ++elements);
 
@@ -225,6 +225,26 @@ void DatasetService::initializeSampleByLevel(SCOPEntryService &entLoader, const 
 
         generateProgressSignal(++fileCounter, filesInDirectory.size());
 
+    }
+}
+
+void DatasetService::applyFilterBySize(SCOPEntryService &entLoader, QStringList &filesInDirectory){
+    unsigned size = 0;
+    QString classTag;
+    foreach (QString pathFile, filesInDirectory) {
+        SCOPEntry * entry = entLoader.loadEntFile(pathFile);
+        size = entry->numResidues();
+        classTag = entry->scss(_scopLevel);
+        delete entry;
+
+        if (size < _minProtSize ||
+                size > _maxProtSize){
+            filesInDirectory.removeOne(pathFile);
+            if (_runSampleByScopLevel){
+                int numProteins = _totalByScopLvl.value(classTag);
+                _totalByScopLvl.insert(classTag, --numProteins);
+            }
+        }
     }
 }
 
@@ -254,6 +274,26 @@ QMap<QString, QString> DatasetService::getParamSampleFromFileList(
     foreach (QString classTag, _totalByScopLvl.keys()) {
         qDebug() << "Total proteins for " << classTag << ": " << _totalByScopLvl[classTag];
     }
+
+    if (_filterBySize){
+        applyFilterBySize(entLoader, filesInDirectory);
+    }
+
+    if ((!_runSampleByScopLevel &&
+         sampleSize >= filesInDirectory.size()) ||
+        (_runSampleByScopLevel && expectedSampSize >= filesInDirectory.size())
+            ){
+        QString path;
+        foreach (path, filesInDirectory){
+            QFileInfo infoSelected(path);
+            sampledFiles.insert(infoSelected.completeBaseName(),
+                                path);
+        }
+
+        generateProgressSignal(1, 1);
+        return sampledFiles;
+    }
+
     do{
         int position = rand.randomIntBetween(0, filesInDirectory.size());
         QString pathSelectedFile = filesInDirectory.at(position);
@@ -266,14 +306,14 @@ QMap<QString, QString> DatasetService::getParamSampleFromFileList(
             continue;
         }
 
-        if (_filterBySize){
-            residuesInProt = scopProtein->numResidues();
-            if(residuesInProt < _minProtSize ||
-                    residuesInProt > _maxProtSize){
-                delete scopProtein;
-                continue;
-            }
-        }
+//        if (_filterBySize){
+//            residuesInProt = scopProtein->numResidues();
+//            if(residuesInProt < _minProtSize ||
+//                    residuesInProt > _maxProtSize){
+//                delete scopProtein;
+//                continue;
+//            }
+//        }
 
         classTag = scopProtein->scss(_scopLevel);
         delete scopProtein;

@@ -204,6 +204,12 @@ const {
 
     Atom normal = CaN * CaC;
 
+
+//    Atom NCa = *ca<=*n;
+//    Atom CaC = *c<=*ca;
+
+//    Atom normal = NCa * CaC;
+
     return normal;
 }
 
