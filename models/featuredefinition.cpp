@@ -38,3 +38,19 @@ void FeatureDefinition::setTreshold(double treshold)
     _treshold = treshold;
 }
 
+int FeatureDefinition::calculatedSize() const{
+    int size = 0;
+
+    switch (_method) {
+    case Distance:
+    case Angle:
+        size = _sqrtSize*_sqrtSize;
+        break;
+    case Mixture:
+        size = _sqrtSize*_sqrtSize*2;
+        break;
+    }
+
+    return size;
+}
+

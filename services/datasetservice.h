@@ -140,6 +140,8 @@ protected:
 
     void initializeSampleByLevel(SCOPEntryService &entLoader, const QStringList &filesInDirectory);
 
+    void applyFilterBySize(SCOPEntryService &entLoader, QStringList &filesInDirectory);
+
 private:
     bool isClassSampleFullfilled(QString className);
     void generateProgressSignal(unsigned int dx, unsigned int total);

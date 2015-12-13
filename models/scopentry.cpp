@@ -52,15 +52,17 @@ float SCOPEntry::astralVersion() const{ return _astralVersion; }
 QString SCOPEntry::scss() const{ return _scss; }
 
 QString SCOPEntry::scss(SCOPEntry::SCOPCLASSLEVEL level) const{
+    QStringList classification = _scss.split(".");
+
     switch (level) {
     case CLASS:
-        return _scss.left(1);
+        return classification.at(0);
         break;
     case FOLD:
-        return _scss.left(3);
+        return classification.at(0)+"."+classification.at(1);
         break;
     case SUPER_FAMILY:
-        return _scss.left(5);
+        return classification.at(0)+"."+classification.at(1)+"."+classification.at(2);
         break;
     case FAMILY:
         return _scss;

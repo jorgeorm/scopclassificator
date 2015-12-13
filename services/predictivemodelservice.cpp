@@ -48,8 +48,6 @@ QString PredictiveModelService::classify(PredictiveModel *model, SCOPEntry *entr
             delete lclFeatures;
             lclFeatures = scaledLocalFeat;
         }
-        //qDebug << "Features Matrix: ";
-        //qDebug() << *lclFeatures;
 
         classification = classify(model, lclFeatures);
         delete lclFeatures;
@@ -71,6 +69,7 @@ QString PredictiveModelService::classify(PredictiveModel *model, Matrix<float> *
         if(model->hasScaledProfile()){
             scaleProfile(profile, model->scaleValuesByFeat(), model->profileLength());
         }
+
         classification = classify(model, profile);
         delete profile;
     }
@@ -82,6 +81,7 @@ QString PredictiveModelService::classify(PredictiveModel *model, float *profile)
     float distance = 0;
     float smallerDistance = FLT_MAX;
     float *modelProfile;
+    float *mostSimilarProfile = NULL;
 
     if (model != NULL && profile != NULL){
 
@@ -102,11 +102,17 @@ QString PredictiveModelService::classify(PredictiveModel *model, float *profile)
                 if(distance < smallerDistance){
                     smallerDistance = distance;
                     assignedClassTag = classTag;
+                    mostSimilarProfile = modelProfile;
                 }
             }
         }
-
-        qDebug() << _entry->sid() << "; " << _entry->scss() << "; " << assignedClassTag;
+//        qDebug() << "=============== Classification: ";
+        qDebug() << _entry->sid() << "; " << _entry->scss() << "; " << assignedClassTag ;
+//        qDebug() << "=============== Most similar profile: ";
+//        QDebug dbg = qDebug();
+//        for(unsigned i = 0; i < model->profileLength(); ++i){
+//            dbg << mostSimilarProfile[i] << ";";
+//        }
 
         profiles.clear();
     }
@@ -118,6 +124,7 @@ float *PredictiveModelService::getProfile(Matrix<float> *representativeFeatures,
                                         SCOPEntry *entry,
                                         FeatureDefinition *featDef){
     FeatureService featGenerator;
+    qDebug() << "Feature method: "<< featDef->method();
     Matrix<float> *localFeatures = featGenerator.localFeaturesMatrix(featDef,entry);
     if (representativeFeatures->scaled()) {
         Matrix<float> *scaledLocalFeat = featGenerator.scaleMatrixByNumber(localFeatures);
@@ -407,8 +414,7 @@ void PredictiveModelService::loadRepresentativeFeatures(QTextStream *istream, Pr
     featDef->setTreshold(linemaxVal.split(": ").at(1).toFloat());
     istream->readLine();
 
-    unsigned featSize = model->featureDefinition()->sqrtSize();
-    featSize *= featSize;
+    unsigned featSize = model->featureDefinition()->calculatedSize();
 
     QString featLine;
     QStringList featValues;
