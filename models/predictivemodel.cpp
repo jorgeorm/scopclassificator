@@ -24,8 +24,13 @@ void PredictiveModel::setRepresentativeFeatures(Matrix<float > *representativeFe
     _representativeFeatures = representativeFeatures;
 }
 
-void PredictiveModel::addProfile(QString classTag, float *profile){
-    _profiles.insertMulti(classTag, profile);
+void PredictiveModel::addProfile(QString key, float *profile){
+    _profiles.insertMulti(key, profile);
+}
+
+void PredictiveModel::addProfile(QString sid, QString scss, float *profile){
+    addProfile(sid, profile);
+    _classes.insert(sid, scss);
 }
 
 FeatureDefinition *PredictiveModel::featureDefinition() const{
@@ -56,9 +61,9 @@ QMap<QString, float *> PredictiveModel::profiles() const{
     return _profiles;
 }
 
-float *PredictiveModel::profile(QString classTag) const{
-    if(_profiles.contains(classTag)){
-        return _profiles.value(classTag);
+float *PredictiveModel::profile(QString key) const{
+    if(_profiles.contains(key)){
+        return _profiles.value(key);
     } else {
         return NULL;
     }

@@ -28,9 +28,8 @@ PredictiveModel *PredictiveModelService::generateModel(QList<SCOPEntry *> entrie
 
     foreach(SCOPEntry *entry, entries){
         entryProfile = getProfile(repFeatures, entry, featDef);
-        model->addProfile(entry->scss(), entryProfile);
+        model->addProfile(entry->sid(), entry->scss(), entryProfile);
     }
-    //scaleProfiles(model);
 
     return model;
 }
