@@ -235,7 +235,7 @@ void ModelTrainingController::obtainModel(){
     _globalCommonFeatures->setScaled(true);
     _model = modelGenerator.generateModel(_entries, _globalCommonFeatures, _featureDef);
     float *scales = NULL;
-//            modelGenerator.getMagnitudeScale(_model);
+    modelGenerator.getMagnitudeScale(_model);
     modelGenerator.scaleProfiles(_model, scales);
 }
 
