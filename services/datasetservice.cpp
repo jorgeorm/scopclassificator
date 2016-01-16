@@ -40,7 +40,9 @@ QList<SCOPEntry *> DatasetService::loadFilesInPathAsEntries(QString pathToFiles)
 
     foreach (const QString &entPath, entFiles) {
         entObjects << loader.loadEntFile(entPath);
-        qDebug() << entObjects.last()->sid() <<", "<< entObjects.last()->scss() << ", " << entObjects.last()->numResidues();
+        qDebug() << entObjects.last()->sid() <<", "<<
+                    entObjects.last()->scss() << ", " <<
+                    entObjects.last()->numResidues();
         generateProgressSignal(++fileCounter, entFiles.size());
     }
 
