@@ -17,17 +17,20 @@ void PredictedClassification::setEntry(SCOPEntry *entry){
     _entry = entry;
 }
 
-QString PredictedClassification::classification() const{
-    return _classification;
+QString PredictedClassification::nearestNeighborScss() const
+{
+    return _nearestNeighborScss;
 }
 
-void PredictedClassification::setClassification(const QString &classification){
-    if (classification == _entry->scss())
-        _assertion = true;
-    _classification = classification;
-
-//    qDebug() << _entry->sid() <<", " <<
-//                _classification << ", " <<
-//                _entry->scss();
+void PredictedClassification::setNearestNeighborScss(const QString &nearestNeighborScss)
+{
+    _nearestNeighborScss = nearestNeighborScss;
 }
 
+QString PredictedClassification::nearestNeighbor() const{
+    return _nearestNeighbor;
+}
+
+void PredictedClassification::setNearestNeighbor(const QString &classification){
+    _nearestNeighbor = classification;
+}

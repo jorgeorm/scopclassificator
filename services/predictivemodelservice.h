@@ -45,7 +45,8 @@ public:
     PredictiveModel *getModel() const;
     void setModel(PredictiveModel *model);
 
-    QString classTag() const;
+    QString nearestNeighbor() const;
+    QString nearestNeighborSCSS() const;
 
     PredictiveModel *loadModel(QString pathModel);
 

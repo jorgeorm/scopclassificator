@@ -16,6 +16,7 @@ public:
     void setProfiles(const QMap<QString, float *> &profiles);
 
     QMap<QString, float *> profiles() const;
+    QMap<QString, QString> classes() const;
 
     /**
      * @brief profile Gets an specific profile using a key value

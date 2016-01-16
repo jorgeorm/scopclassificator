@@ -51,11 +51,13 @@ void ModelEvaluationController::saveEvaluation(QString path){
 
     if(ofile.open(QIODevice::WriteOnly)){
         QTextStream ostream(&ofile);
-        ostream << "Protein, ClassTag, SCOPClass" << endl;
+        ostream << "POTEIN, SCOP-CLASSIFICATION, NEAREST_NEIGHBOR, SCOP-CLASSIFICATION" << endl;
+
         foreach (PredictedClassification *classification, classifications()) {
             ostream << classification->entry()->sid() << ", ";
-            ostream << classification->classification() << ", ";
-            ostream << classification->entry()->scss() << endl;
+            ostream << classification->entry()->scss()<< ", ";
+            ostream << classification->nearestNeighbor()<< ", ";
+            ostream << classification->nearestNeighborScss()<< endl;
         }
 
         ofile.close();
@@ -174,7 +176,8 @@ void ModelEvaluationController::onEntryClassified(QString entryName){
         QThread *classifier_thread;
 
         classifier = _classifiers.take(entryName);
-        _classifications.value(entryName)->setClassification(classifier->classTag());
+        _classifications.value(entryName)->setNearestNeighbor(classifier->nearestNeighbor());
+        _classifications.value(entryName)->setNearestNeighborScss(classifier->nearestNeighborSCSS());
 
         classifier_thread = _classifiersThreads.take(entryName);
         classifier_thread->quit();

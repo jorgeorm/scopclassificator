@@ -61,6 +61,10 @@ QMap<QString, float *> PredictiveModel::profiles() const{
     return _profiles;
 }
 
+QMap<QString, QString> PredictiveModel::classes() const{
+    return _classes;
+}
+
 float *PredictiveModel::profile(QString key) const{
     if(_profiles.contains(key)){
         return _profiles.value(key);

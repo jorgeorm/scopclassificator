@@ -14,13 +14,16 @@ public:
     SCOPEntry *entry() const;
     void setEntry(SCOPEntry *entry);
 
-    QString classification() const;
-    void setClassification(const QString &classification);
+    QString nearestNeighbor() const;
+    void setNearestNeighbor(const QString &classification);
+
+    QString nearestNeighborScss() const;
+    void setNearestNeighborScss(const QString &nearestNeighborScss);
 
 private:
     SCOPEntry *_entry;
-    QString _classification;
-    bool _assertion;
+    QString _nearestNeighbor;
+    QString _nearestNeighborScss;
 };
 
 #endif // PREDICTEDCLASSIFICATION_H

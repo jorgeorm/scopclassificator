@@ -106,7 +106,7 @@ QString PredictiveModelService::classify(PredictiveModel *model, float *profile)
             }
         }
 //        qDebug() << "=============== Classification: ";
-        qDebug() << _entry->sid() << "; " << _entry->scss() << "; " << assignedClassTag ;
+        qDebug() << _entry->sid() << "; " << _entry->scss() << "; " << assignedClassTag << ";" << model->classes().value(assignedClassTag);
 //        qDebug() << "=============== Most similar profile: ";
 //        QDebug dbg = qDebug();
 //        for(unsigned i = 0; i < model->profileLength(); ++i){
@@ -242,7 +242,7 @@ void PredictiveModelService::saveModel(PredictiveModel *model, QString file){
             if (i < repFeats->rows()) ostream << endl;
         }
         ostream << "==Profiles" << endl;
-        ostream << "Is Scaled (RMS)?: " << model->hasScaledProfile() << endl;
+        ostream << "Is Scaled?: " << model->hasScaledProfile() << endl;
         if (model->hasScaledProfile()){
             profile = model->scaleValuesByFeat();
             ostream << "Scale Values: ";
@@ -252,14 +252,24 @@ void PredictiveModelService::saveModel(PredictiveModel *model, QString file){
             }
             ostream << endl;
         }
-        ostream << "Classtag, Profile (csv)" << endl;
+        ostream << "SID, SCSS, Profile (csv)" << endl;
         QList<float *> profilesByClass;
-        foreach (QString classTag, model->profiles().keys()){
-            profilesByClass = model->profiles().values(classTag);
+
+        QMap<QString, QString> sids = model->classes();
+        QMap<QString, float *> profiles = model->profiles();
+
+        foreach (QString key, profiles.keys()){
+
+            profilesByClass = profiles.values(key);
 
             foreach(profile, profilesByClass){
-                ostream << classTag;
+                ostream << key;
                 ostream << ", ";
+
+                if(! sids.isEmpty()){
+                    ostream << sids.value(key);
+                    ostream << ", ";
+                }
 
                 for(unsigned i = 0; i < profileLength; ++i){
                     ostream << profile[i];
@@ -302,7 +312,7 @@ void PredictiveModelService::scaleProfile(float *profile, float *scaleValues, un
     }
 }
 
-QString PredictiveModelService::classTag() const{
+QString PredictiveModelService::nearestNeighbor() const{
     return _classTag;
 }
 
@@ -374,6 +384,12 @@ PredictiveModel *PredictiveModelService::getModel() const
 void PredictiveModelService::setModel(PredictiveModel *model)
 {
     _model = model;
+}
+
+QString PredictiveModelService::nearestNeighborSCSS() const
+{
+    if(! _model->classes().isEmpty()) return _model->classes().value(_classTag);
+    else return _classTag;
 }
 
 void PredictiveModelService::runClassification(){
@@ -449,14 +465,25 @@ void PredictiveModelService::loadProfiles(QTextStream *istream, PredictiveModel 
     QStringList profile;
     float *profileTmp;
     istream->readLine(); //Read header profile
+    int numberOfKeys = 0;
     while(! istream->atEnd()){
         profileLine = istream->readLine();
         profile = profileLine.split(",");
         profileTmp = new float[profileSize];
+
+        numberOfKeys = profile.size() - profileSize;
         for (unsigned i = 0; i < profileSize; ++i){
-            profileTmp[i] = profile.at(i+1).toFloat();
+            profileTmp[i] = profile.at(i+numberOfKeys).toFloat();
         }
-        model->addProfile(profile.at(0), profileTmp);
+
+        switch (numberOfKeys) {
+        case 1:
+            model->addProfile(profile.at(0), profileTmp);
+            break;
+        case 2:
+            model->addProfile(profile.at(0), profile.at(1), profileTmp);
+            break;
+        }
     }
 }
 
